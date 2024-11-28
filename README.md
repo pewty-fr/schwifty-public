@@ -1,5 +1,7 @@
 # schwifty
 
+<img src="image/schwifty-logo.png" alt="logo" width="200" height="200">
+
 Fully customizable Kubernetes web view.
 
 You can define different view depending on the group of the connected user (available with SSO feature).
