@@ -1,0 +1,231 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.1
+  name: actions.schwifty.pewty.fr
+spec:
+  group: schwifty.pewty.fr
+  names:
+    kind: Action
+    listKind: ActionList
+    plural: actions
+    singular: action
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: Action is the Schema for the actions API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ActionSpec defines the desired state of Action
+            properties:
+              cordon:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              create:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              delete:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              drain:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              exec:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              get:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              logs:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              pause:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              portForward:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              resume:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              sync:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+              update:
+                properties:
+                  exclude:
+                    items:
+                      type: string
+                    type: array
+                  include:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - exclude
+                - include
+                type: object
+            required:
+            - cordon
+            - create
+            - delete
+            - drain
+            - exec
+            - get
+            - logs
+            - pause
+            - portForward
+            - resume
+            - sync
+            - update
+            type: object
+          status:
+            description: ActionStatus defines the observed state of Action
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

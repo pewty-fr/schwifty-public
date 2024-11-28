@@ -1,0 +1,11 @@
+{{- range $name,$list := .Values.lists }}
+---
+apiVersion: schwifty.pewty.fr/v1
+kind: List
+metadata:
+  labels:
+    {{- include "schwifty.labels" $. | nindent 4 }}
+  name: {{ $name }}
+spec:
+  {{- toYaml $list | nindent 2 }}
+{{- end}}

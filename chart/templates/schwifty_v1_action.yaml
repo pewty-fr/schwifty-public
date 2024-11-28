@@ -1,0 +1,10 @@
+{{- range $name,$action := .Values.actions }}
+---
+kind: Action
+metadata:
+  labels:
+    {{- include "schwifty.labels" $. | nindent 4 }}
+  name: {{ $name }}
+spec:
+  {{- toYaml $action | nindent 2 }}
+{{- end}}

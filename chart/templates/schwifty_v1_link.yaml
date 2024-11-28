@@ -1,0 +1,11 @@
+{{- range $name,$links := .Values.links }}
+---
+apiVersion: schwifty.pewty.fr/v1
+kind: Link
+metadata:
+  labels:
+    {{- include "schwifty.labels" $. | nindent 4 }}
+  name: {{ $name }}
+spec:
+  {{- toYaml $links | nindent 2 }}
+{{- end}}

@@ -1,0 +1,11 @@
+{{- range $name,$edit := .Values.edits }}
+---
+apiVersion: schwifty.pewty.fr/v1
+kind: Edit
+metadata:
+  labels:
+    {{- include "schwifty.labels" $. | nindent 4 }}
+  name: {{ $name }}
+spec:
+  {{- toYaml $edit | nindent 2 }}
+{{- end}}
