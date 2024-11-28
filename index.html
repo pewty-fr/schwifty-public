@@ -46,15 +46,40 @@ _flutter.buildConfig = {"engineRevision":"db49896cf25ceabc44096d5f088d86414e05a7
 
 _flutter.loader.load({
   serviceWorkerSettings: {
-    serviceWorkerVersion: "2123673066"
+    serviceWorkerVersion: "3310647657"
   }
 });
 
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+
+  <style>
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    body {
+        animation: fadeIn ease 3s;
+    }
+
+    .splashscreen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100vw;
+
+      img {
+        align-self: center;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="splashscreen">
+    <img src="assets/assets/schwifty-logo.png" alt="logo" width="20%" />
+  </div>
   <script>
     (()=>{var L=()=>navigator.vendor==="Google Inc."||navigator.agent==="Edg/",W=()=>typeof ImageDecoder>"u"?!1:L(),E=()=>typeof Intl.v8BreakIterator<"u"&&typeof Intl.Segmenter<"u",P=()=>{let s=[0,97,115,109,1,0,0,0,1,5,1,95,1,120,0];return WebAssembly.validate(new Uint8Array(s))},p={hasImageCodecs:W(),hasChromiumBreakIterators:E(),supportsWasmGC:P(),crossOriginIsolated:window.crossOriginIsolated};function u(...s){return new URL(S(...s),document.baseURI).toString()}function S(...s){return s.filter(t=>!!t).map((t,i)=>i===0?_(t):j(_(t))).filter(t=>t.length).join("/")}function j(s){let t=0;for(;t<s.length&&s.charAt(t)==="/";)t++;return s.substring(t)}function _(s){let t=s.length;for(;t>0&&s.charAt(t-1)==="/";)t--;return s.substring(0,t)}function b(s,t){return s.canvasKitBaseUrl?s.canvasKitBaseUrl:t.engineRevision&&!t.useLocalCanvasKit?S("https://www.gstatic.com/flutter-canvaskit",t.engineRevision):"canvaskit"}var h=class{constructor(){this._scriptLoaded=!1}setTrustedTypesPolicy(t){this._ttPolicy=t}async loadEntrypoint(t){let{entrypointUrl:i=u("main.dart.js"),onEntrypointLoaded:r,nonce:e}=t||{};return this._loadJSEntrypoint(i,r,e)}async load(t,i,r,e,n){n??=o=>{o.initializeEngine(r).then(l=>l.runApp())};let{entryPointBaseUrl:a}=r;if(t.compileTarget==="dart2wasm")return this._loadWasmEntrypoint(t,i,a,n);{let o=t.mainJsPath??"main.dart.js",l=u(a,o);return this._loadJSEntrypoint(l,n,e)}}didCreateEngineInitializer(t){typeof this._didCreateEngineInitializerResolve=="function"&&(this._didCreateEngineInitializerResolve(t),this._didCreateEngineInitializerResolve=null,delete _flutter.loader.didCreateEngineInitializer),typeof this._onEntrypointLoaded=="function"&&this._onEntrypointLoaded(t)}_loadJSEntrypoint(t,i,r){let e=typeof i=="function";if(!this._scriptLoaded){this._scriptLoaded=!0;let n=this._createScriptTag(t,r);if(e)console.debug("Injecting <script> tag. Using callback."),this._onEntrypointLoaded=i,document.head.append(n);else return new Promise((a,o)=>{console.debug("Injecting <script> tag. Using Promises. Use the callback approach instead!"),this._didCreateEngineInitializerResolve=a,n.addEventListener("error",o),document.head.append(n)})}}async _loadWasmEntrypoint(t,i,r,e){if(!this._scriptLoaded){this._scriptLoaded=!0,this._onEntrypointLoaded=e;let{mainWasmPath:n,jsSupportRuntimePath:a}=t,o=u(r,n),l=u(r,a);this._ttPolicy!=null&&(l=this._ttPolicy.createScriptURL(l));let m=WebAssembly.compileStreaming(fetch(o)),c=await import(l),w;t.renderer==="skwasm"?w=(async()=>{let d=await i.skwasm;return window._flutter_skwasmInstance=d,{skwasm:d.wasmExports,skwasmWrapper:d,ffi:{memory:d.wasmMemory}}})():w={};let f=await c.instantiate(m,w);await c.invoke(f)}}_createScriptTag(t,i){let r=document.createElement("script");r.type="application/javascript",i&&(r.nonce=i);let e=t;return this._ttPolicy!=null&&(e=this._ttPolicy.createScriptURL(t)),r.src=e,r}};async function T(s,t,i){if(t<0)return s;let r,e=new Promise((n,a)=>{r=setTimeout(()=>{a(new Error(`${i} took more than ${t}ms to resolve. Moving on.`,{cause:T}))},t)});return Promise.race([s,e]).finally(()=>{clearTimeout(r)})}var v=class{setTrustedTypesPolicy(t){this._ttPolicy=t}loadServiceWorker(t){if(!t)return console.debug("Null serviceWorker configuration. Skipping."),Promise.resolve();if(!("serviceWorker"in navigator)){let o="Service Worker API unavailable.";return window.isSecureContext||(o+=`
 The current context is NOT secure.`,o+=`
