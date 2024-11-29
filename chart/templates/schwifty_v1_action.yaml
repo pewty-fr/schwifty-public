@@ -1,9 +1,10 @@
 {{- range $name,$action := .Values.actions }}
 ---
+apiVersion: schwifty.pewty.fr/v1
 kind: Action
 metadata:
   labels:
-    {{- include "schwifty.labels" $. | nindent 4 }}
+    {{- include "schwifty.labels" $ | nindent 4 }}
   name: {{ $name }}
 spec:
   {{- toYaml $action | nindent 2 }}

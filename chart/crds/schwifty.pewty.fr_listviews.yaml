@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.1
-  name: edits.schwifty.pewty.fr
+  name: listviews.schwifty.pewty.fr
 spec:
   group: schwifty.pewty.fr
   names:
-    kind: Edit
-    listKind: EditList
-    plural: edits
-    singular: edit
+    kind: ListView
+    listKind: ListViewList
+    plural: listviews
+    singular: listview
   scope: Namespaced
   versions:
   - name: v1
     schema:
       openAPIV3Schema:
-        description: Edit is the Schema for the edits API
+        description: ListView is the Schema for the lists API
         properties:
           apiVersion:
             description: |-
@@ -38,7 +38,7 @@ spec:
             type: object
           spec:
             items:
-              description: EditSpec defines the desired state of Edit
+              description: ListViewSpec defines the desired state of ListView
               properties:
                 items:
                   items:
@@ -47,15 +47,15 @@ spec:
                         type: string
                       label:
                         type: string
-                      subresource:
-                        type: string
+                      selectable:
+                        type: boolean
                       type:
                         type: string
+                      width:
+                        type: integer
                     required:
                     - key
                     - label
-                    - subresource
-                    - type
                     type: object
                   type: array
                 resourceSelector:
@@ -66,7 +66,7 @@ spec:
               type: object
             type: array
           status:
-            description: EditStatus defines the observed state of Edit
+            description: ListViewStatus defines the observed state of ListView
             type: object
         type: object
     served: true

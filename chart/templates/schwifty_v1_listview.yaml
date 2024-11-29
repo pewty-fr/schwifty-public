@@ -1,10 +1,10 @@
 {{- range $name,$list := .Values.lists }}
 ---
 apiVersion: schwifty.pewty.fr/v1
-kind: List
+kind: ListView
 metadata:
   labels:
-    {{- include "schwifty.labels" $. | nindent 4 }}
+    {{- include "schwifty.labels" $ | nindent 4 }}
   name: {{ $name }}
 spec:
   {{- toYaml $list | nindent 2 }}

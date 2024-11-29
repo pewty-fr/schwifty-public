@@ -45,7 +45,7 @@ Helm chart can provide HAProxy already configured, with all needed CRD for Schwi
 WARNING: avoid exposing your Kubernetes API publicly through ingress. Please use VPN or port-forwarding. Schwifty is running entirely in your browser, and can access your Kubernetes clusters through your VPN.
 
 ```
-helm upgrade --install schwifty chart/ -f values.yaml
+helm upgrade --install schwifty chart/ -f chart/values.yaml
 ```
 
 ## Values

@@ -43,7 +43,7 @@ spec:
                 type: string
               edit:
                 type: string
-              groupdSelector:
+              groupSelector:
                 type: string
               link:
                 type: string
@@ -54,7 +54,7 @@ spec:
             required:
             - action
             - edit
-            - groupdSelector
+            - groupSelector
             - link
             - list
             - navigation

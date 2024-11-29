@@ -45,17 +45,23 @@ spec:
                     icon:
                       type: string
                     items:
-                      items: {}
+                      items:
+                        properties:
+                          label:
+                            type: string
+                          route:
+                            type: string
+                        required:
+                        - label
+                        - route
+                        type: object
                       type: array
                     label:
                       type: string
                     route:
                       type: string
                   required:
-                  - icon
-                  - items
                   - label
-                  - route
                   type: object
                 type: array
               other:

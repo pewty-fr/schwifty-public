@@ -4,7 +4,7 @@ apiVersion: schwifty.pewty.fr/v1
 kind: Navigation
 metadata:
   labels:
-    {{- include "schwifty.labels" $. | nindent 4 }}
+    {{- include "schwifty.labels" $ | nindent 4 }}
   name: {{ $name }}
 spec:
   {{- toYaml $navigation | nindent 2 }}
