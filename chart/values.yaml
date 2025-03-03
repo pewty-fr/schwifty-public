@@ -1,11 +1,137 @@
+fullnameOverride: ""
+nameOverride: ""
+
+image:
+  # Must be defined if type is empty
+  repository: "public.ecr.aws/pewty"
+  name: "schwifty"
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "2025-03-07T10-44-15Z-SNAPSHOT"
+
+env: []
+
+# -- https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  enabled: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set fullname is used
+  name: "schwfity-back"
+
+podAnnotations: {}
+
+# -- https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+podSecurityContext:
+  fsGroup: 1000
+
+# -- https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  runAsNonRoot: true
+  runAsUser: 1000
+
+# -- https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  type: ClusterIP
+  ports:
+  - name: api
+    port: 16666
+  - name: portforward
+    port: 16667
+
+# -- https://kubernetes.io/docs/concepts/services-networking/ingress/
+ingress:
+  enabled: false
+  className: ""
+  hosts:
+  #   - host: "api.example.com"
+  #     paths:
+  #       - path: /
+  #         pathType: ImplementationSpecific
+  #         portName: api
+  #   - host: "portforward.example.com"
+  #     paths:
+  #       - path: /
+  #         pathType: ImplementationSpecific
+  #         portName: portforward
+
+# -- https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+resources:
+  {}
+  # limits:
+  #   cpu: 200m
+  #   memory: 200Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 100Mi
+
+replicaCount: 1
+
+# -- https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 10%
+      maxSurge: 10%
+
+# -- https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+podDisruptionBudget:
+  enabled: false
+  # minAvailable: 1
+  maxUnavailable: 10%
+
+tolerations: []
+
+nodeSelector: {}
+
+# -- https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/
+affinity: {}
+
+# -- https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: "kubernetes.io/hostname"
+    whenUnsatisfiable: ScheduleAnyway
+  - maxSkew: 1
+    topologyKey: "topology.kubernetes.io/zone"
+    whenUnsatisfiable: ScheduleAnyway
+
+# -- https://kubernetes.io/fr/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+livenessProbe: {}
+# -- https://kubernetes.io/fr/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+readinessProbe: {}
+# -- https://kubernetes.io/fr/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+startupProbe: {}
+
+
 customizations:
-  default:
-    groupSelector: ".*"
+  admin:
+    groupSelector: "schwifty-admin-users"
     action: default
-    navigation: default
-    list: default
-    edit: default
-    link: default
+    navigation: admin
+    listView: default
+    editView: default
+  dev:
+    groupSelector: "schwifty-dev-users"
+    action: default
+    navigation: dev
+    listView: default
+    editView: default
+  support:
+    groupSelector: "schwifty-support-users"
+    action: default
+    navigation: support
+    listView: default
+    editView: default
 
 actions:
   default:
@@ -26,18 +152,18 @@ actions:
         - "*"
       exclude: []
     cordon:
-      include:
-        - "nodes"
+      include: []
+        # - "nodes"
       exclude:
         - "*"
     drain:
-      include:
-        - "nodes"
+      include: []
+        # - "nodes"
       exclude:
         - "*"
     exec:
-      include:
-        - "pods"
+      include: []
+        # - "pods"
       exclude:
         - "*"
     logs:
@@ -45,37 +171,37 @@ actions:
         - "pods"
       exclude:
         - "*"
-    # disabled for now
-    portForward:
-      include: []
+    portforward:
+      include:
+        - "pods"
       exclude:
         - "*"
     sync:
-      include:
-        - "helm.toolkit.fluxcd.io/helmreleases"
-        - "kustomize.toolkit.fluxcd.io/kustomizations"
-        - "source.toolkit.fluxcd.io/gitrepositories"
-        - "external-secrets.io/externalsecrets"
-        - "external-secrets.io/pushsecrets"
+      include: []
+        # - "helm.toolkit.fluxcd.io/helmreleases"
+        # - "kustomize.toolkit.fluxcd.io/kustomizations"
+        # - "source.toolkit.fluxcd.io/gitrepositories"
+        # - "external-secrets.io/externalsecrets"
+        # - "external-secrets.io/pushsecrets"
       exclude:
         - "*"
     pause:
-      include:
-        - "helm.toolkit.fluxcd.io/helmreleases"
-        - "kustomize.toolkit.fluxcd.io/kustomizations"
-        - "source.toolkit.fluxcd.io/gitrepositories"
+      include: []
+        # - "helm.toolkit.fluxcd.io/helmreleases"
+        # - "kustomize.toolkit.fluxcd.io/kustomizations"
+        # - "source.toolkit.fluxcd.io/gitrepositories"
       exclude:
         - "*"
     resume:
-      include:
-        - "helm.toolkit.fluxcd.io/helmreleases"
-        - "kustomize.toolkit.fluxcd.io/kustomizations"
-        - "source.toolkit.fluxcd.io/gitrepositories"
+      include: []
+        # - "helm.toolkit.fluxcd.io/helmreleases"
+        # - "kustomize.toolkit.fluxcd.io/kustomizations"
+        # - "source.toolkit.fluxcd.io/gitrepositories"
       exclude:
         - "*"
 
 navigations:
-  default:
+  admin:
     other:
       enabled: true
       label: "Other"
@@ -171,6 +297,8 @@ navigations:
             route: "rbac.authorization.k8s.io/rolebindings"
           - label: "ClusterRoles"
             route: "rbac.authorization.k8s.io/clusterroles"
+          - label: "ClusterRoleBindings"
+            route: "rbac.authorization.k8s.io/clusterrolebindings"
       - label: "FluxCD"
         icon: "https://raw.githubusercontent.com/fluxcd/website/refs/heads/main/assets/icons/logo.svg"
         items:
@@ -253,6 +381,116 @@ navigations:
       - label: "Namespace"
         icon: "https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/svg/resources/unlabeled/ns.svg"
         route: "namespaces"
+      - label: "Event"
+        icon: "57918"
+        route: "events"
+      - label: "Customization"
+        icon: "57778"
+        items:
+          - label: "Customization"
+            route: "schwifty.pewty.fr/customizations"
+          - label: "EditView"
+            route: "schwifty.pewty.fr/editviews"
+          - label: "Action"
+            route: "schwifty.pewty.fr/actions"
+          - label: "Navigation"
+            route: "schwifty.pewty.fr/navigations"
+          - label: "ListView"
+            route: "schwifty.pewty.fr/listviews"
+  dev:
+    other:
+      enabled: false
+    items:
+      - label: "Workload"
+        icon: "https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/svg/resources/unlabeled/pod.svg"
+        items:
+          - label: "Pods"
+            route: "pods"
+          - label: "Deployments"
+            route: "apps/deployments"
+          - label: "StatefulSets"
+            route: "apps/statefulsets"
+          - label: "DaemonSets"
+            route: "apps/daemonsets"
+          - label: "ReplicaSets"
+            route: "apps/replicasets"
+          - label: "ReplicationController"
+            route: "replicationcontrollers"
+          - label: "Jobs"
+            route: "batch/jobs"
+          - label: "CronJobs"
+            route: "batch/cronjobs"
+      - label: "Config"
+        icon: "https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/svg/resources/unlabeled/cm.svg"
+        items:
+          - label: "ConfigMaps"
+            route: "configmaps"
+          - label: "Secrets"
+            route: "secrets"
+          - label: "ResourceQuotas"
+            route: "resourcequotas"
+          - label: "LimitRanges"
+            route: "limitranges"
+          - label: "HorizontalPodAutoscalers"
+            route: "autoscaling/horizontalpodautoscalers"
+          - label: "PodDisruptionBudgets"
+            route: "policy/poddisruptionbudgets"
+      - label: "Network"
+        icon: "https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/svg/resources/unlabeled/svc.svg"
+        items:
+          - label: "Services"
+            route: "services"
+          - label: "Ingresses"
+            route: "networking.k8s.io/ingresses"
+      - label: "Storage"
+        icon: "https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/svg/resources/unlabeled/pvc.svg"
+        items:
+          - label: "PersistentVolumeClaims"
+            route: "persistentvolumeclaims"
+          - label: "PersistentVolumes"
+            route: "persistentvolumes"
+      - label: "FluxCD"
+        icon: "https://raw.githubusercontent.com/fluxcd/website/refs/heads/main/assets/icons/logo.svg"
+        items:
+          - label: "HelmReleases"
+            route: "helm.toolkit.fluxcd.io/helmreleases"
+          - label: "Kustomizations"
+            route: "kustomize.toolkit.fluxcd.io/kustomizations"
+      - label: "External Secrets"
+        icon: "https://raw.githubusercontent.com/external-secrets/external-secrets/refs/heads/main/docs/pictures/eso-round-logo.svg"
+        items:
+          - label: "External Secrets"
+            route: "external-secrets.io/externalsecrets"
+          - label: "Push Secrets"
+            route: "external-secrets.io/pushsecrets"
+      - label: "Homer"
+        icon: "https://raw.githubusercontent.com/bastienwirtz/homer/refs/heads/main/public/assets/icons/logo.svg"
+        items:
+          - label: "Homer Services"
+            route: "homer.bananaops.io/homerservices"
+      - label: "Event"
+        icon: "57918"
+        route: "events"
+  support:
+    other:
+      enabled: false
+    items:
+      - label: "Workload"
+        icon: "https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/svg/resources/unlabeled/pod.svg"
+        items:
+          - label: "Pods"
+            route: "pods"
+          - label: "Deployments"
+            route: "apps/deployments"
+          - label: "StatefulSets"
+            route: "apps/statefulsets"
+          - label: "DaemonSets"
+            route: "apps/daemonsets"
+      - label: "FluxCD"
+        icon: "https://raw.githubusercontent.com/fluxcd/website/refs/heads/main/assets/icons/logo.svg"
+        items:
+          - label: "HelmReleases"
+            route: "helm.toolkit.fluxcd.io/helmreleases"
       - label: "Event"
         icon: "57918"
         route: "events"
@@ -373,12 +611,9 @@ edits:
   default:
     - resourceSelector: "*"
       items:
-        # - label: 'Name'
-        #   key: '$.metadata.name'
-        #   type: fields
-        # - label: 'Name'
-        #   key: '$.metadata.namespace'
-        #   type: fields
+        - label: 'Name'
+          key: '$.metadata.namespace'
+          type: fields
         - label: "Annotations"
           key: "$.metadata.annotations"
           type: fields
@@ -394,7 +629,7 @@ edits:
           key: "$.metadata"
         - label: "Data"
           key: "$.data"
-          type: fields
+          type: block
     - resourceSelector: secrets
       items:
         - label: "Metadata"
@@ -403,48 +638,75 @@ edits:
           key: "$.data"
           type: base64fields
 
-links:
-  default:
-    - resourceSelector: pods
-      items:
-        - key: "$.spec.nodeName"
-          target: "nodes/name"
+users:
+  - username: "admin"
+    password: "8b7dc261075761e519143ccd1cf56e6d58961089bf523326a30b4cde0bcaf529"
+    groups:
+      - "schwifty-admin-users"
+  - username: "dev"
+    password: "8b7dc261075761e519143ccd1cf56e6d58961089bf523326a30b4cde0bcaf529"
+    groups:
+      - "schwifty-dev-users"
+  - username: "support"
+    password: "8b7dc261075761e519143ccd1cf56e6d58961089bf523326a30b4cde0bcaf529"
+    groups:
+      - "schwifty-support-users"
 
-haproxy:
-  enabled: true
-  ingress:
-    enabled: false
-  config: |
-    global
-      log stdout format raw local0
-      maxconn 4096
-      tune.ssl.default-dh-param 2048
-    defaults
-      log global
-      mode http
-      timeout connect 5000ms
-      timeout client 50000ms
-      timeout server 50000ms
-    resolvers coredns
-      nameserver dns1 10.100.0.10:53
-      resolve_retries       3
-      timeout resolve       1s
-      timeout retry         1s
-      hold valid            10s
-    frontend http-in
-      bind *:80
-      default_backend kube
-    backend kube
-      option httpchk
-      http-response add-header X-Backend-Server %s
-      http-check send meth GET uri /readyz
+test: schwifty-fullname
 
-      acl is_option method OPTIONS
-      http-request set-method GET if is_option
-      http-request set-path /readyz if is_option
-
-      http-response set-header Access-Control-Allow-Origin "https://kube.pewty.fr"
-      http-response set-header Access-Control-Allow-Headers "*"
-      http-response set-header Access-Control-Allow-Methods "GET, OPTIONS, POST, PUT, PATCH, DELETE"
-
-      server kube kubernetes.default.svc.cluster.local.:443 check ssl verify none resolvers coredns resolve-prefer ipv4
+config:
+  logLevel: info
+  originUrl: "https://kube.pewty.fr"
+  portforwardUrl: "https://portforward.example.com"
+  api:
+    customization:
+      enabled: true
+      namespace: "{{ .Release.Namespace}}"
+    discovery:
+      enabled: true
+      clusters:
+        - name: "my-prod-cluster"
+          mainUrl: "https://api.example.com"
+          portforwardUrl: "{{ .Values.config.portforwardUrl }}"
+          customizationRef: "{{ (index .Values.config.api.discovery.clusters 0).name }}"
+          authenticationRef: "{{ (index .Values.config.api.discovery.clusters 0).name }}"
+          discoveryRef: "{{ (index .Values.config.api.discovery.clusters 0).name }}"
+        - name: "my-staging-cluster"
+          mainUrl: "https://api.staging.example.com"
+          portforwardUrl: "https://portforward.staging.example.com"
+          customizationRef: "{{ (index .Values.config.api.discovery.clusters 0).name }}"
+          authenticationRef: "{{ (index .Values.config.api.discovery.clusters 0).name }}"
+          discoveryRef: "{{ (index .Values.config.api.discovery.clusters 0).name }}"
+    authentication:
+      enabled: true
+      noAuth:
+        enabled: false
+      basic:
+        enabled: true
+        salt: "Aingeithoo9lainaitixes5Jaid7te"
+        secretRef:
+          name: "schwifty-basic-auth"
+          namespace: "{{ .Release.Namespace}}"
+      externalOidc:
+        enabled: false
+        oidc:
+          clientId: "oidc-client-id"
+          clientSecret: "oidc"
+          issuerUrl: "https://oidc-issuer-url"
+          redirectUrl: "https://oidc-redirect-url"
+          groupsClaim: "cognito:groups"
+          usernameClaim: "cognito:username"
+          groupsPrefix: "schwifty-"
+      kubernetesOidc:
+        enabled: false
+        oidc:
+          clientId: "oidc-client-id"
+          clientSecret: "oidc"
+          issuerUrl: "https://oidc-issuer-url"
+          redirectUrl: "https://oidc-redirect-url"
+          groupsClaim: "cognito:groups"
+          usernameClaim: "cognito:username"
+          groupsPrefix: "schwifty-"
+  port:
+    main: 16666
+    portforward: 16667

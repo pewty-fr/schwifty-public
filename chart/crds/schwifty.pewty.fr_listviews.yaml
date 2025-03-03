@@ -43,10 +43,18 @@ spec:
                 items:
                   items:
                     properties:
+                      description:
+                        type: string
+                      format:
+                        type: string
                       key:
                         type: string
                       label:
                         type: string
+                      link:
+                        type: string
+                      priority:
+                        type: integer
                       selectable:
                         type: boolean
                       type:

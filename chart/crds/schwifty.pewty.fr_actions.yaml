@@ -151,7 +151,7 @@ spec:
                 - exclude
                 - include
                 type: object
-              portForward:
+              portforward:
                 properties:
                   exclude:
                     items:
@@ -216,7 +216,7 @@ spec:
             - get
             - logs
             - pause
-            - portForward
+            - portforward
             - resume
             - sync
             - update

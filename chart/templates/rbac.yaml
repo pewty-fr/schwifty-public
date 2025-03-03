@@ -1,0 +1,58 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "schwifty.fullname" . }}
+rules:
+- apiGroups: 
+    - ""
+  resources: 
+    - "users"
+    - "groups"
+  verbs: 
+    - "impersonate"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "schwifty.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "schwifty.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "schwifty.fullname" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "schwifty.fullname" . }}
+rules:
+- apiGroups:
+    - "schwifty.pewty.fr"
+  resources: 
+    - "*"
+  verbs:
+    - "*"
+- apiGroups:
+    - ""
+  resources: 
+    - secrets
+  verbs:
+    - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "schwifty.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "schwifty.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "schwifty.fullname" . }}
+
