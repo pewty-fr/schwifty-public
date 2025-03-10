@@ -652,8 +652,6 @@ users:
     groups:
       - "schwifty-support-users"
 
-test: schwifty-fullname
-
 config:
   logLevel: info
   originUrl: "https://kube.pewty.fr"
@@ -681,6 +679,7 @@ config:
       enabled: true
       noAuth:
         enabled: false
+        groups: []
       basic:
         enabled: true
         salt: "Aingeithoo9lainaitixes5Jaid7te"
