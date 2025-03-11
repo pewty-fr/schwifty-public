@@ -109615,10 +109615,7 @@ g.toString
 o=A.r2(g)
 o.toString
 g=p.a
-n=g.d
-if(!(n==null&&n.length===0)){g=g.e
-g=g==null&&g.length===0}else g=!0
-s=g?3:5
+s=g.d==null||g.e==null?3:5
 break
 case 3:$.im().Fu($.b8().ghP().b)
 s=4
