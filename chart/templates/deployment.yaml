@@ -21,6 +21,7 @@ spec:
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
+        checksum/config: {{ tpl (print $.Template.BasePath "/secret-config.yaml") . | sha256sum }}
       {{- end }}
       labels:
         {{- include "schwifty.selectorLabels" . | nindent 8 }}
