@@ -41,22 +41,19 @@ spec:
             properties:
               action:
                 type: string
-              edit:
+              editView:
                 type: string
               groupSelector:
                 type: string
-              link:
-                type: string
-              list:
+              listView:
                 type: string
               navigation:
                 type: string
             required:
             - action
-            - edit
+            - editView
             - groupSelector
-            - link
-            - list
+            - listView
             - navigation
             type: object
           status:

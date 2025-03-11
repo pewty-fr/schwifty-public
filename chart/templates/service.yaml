@@ -1,0 +1,19 @@
+{{- if .Values.service }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "schwifty.fullname" . }}
+  labels:
+    {{- include "schwifty.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  {{- range .Values.service.ports }}
+    - targetPort: "{{ .name }}"
+      protocol: TCP
+      name: "{{ .name }}"
+      port: {{ .port }}
+  {{- end }}
+  selector:
+    {{- include "schwifty.selectorLabels" . | nindent 4 }}
+{{- end }}

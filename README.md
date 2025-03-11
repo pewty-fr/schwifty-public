@@ -4,49 +4,11 @@
 
 Fully customizable Kubernetes web view.
 
-You can define different view depending on the group of the connected user (available with SSO feature).
+You can define different views depending on the group of the connected users.
 
 ## Getting Started
 
 Schwifty is running entirely in your browser. All your data stay in browser or in your Kubernetes clusters.
-
-For Schwity to work, CORS must be enable on Kubernetes API.
-
-### Enable CORS to access Kubernetes API
-
-#### Option 1: setup Kubeapi server
-
-```
-- kube-apiserver
-  - --cors-allowed-origins=https://kube.pewty.fr
-```
-
-#### Option 2: setup HAProxy as Kubeapi server proxy
-
-Install HAProxy pod in your cluster to proxy Kubernetes api and add the following in your backend config:
-
-```
-# Add headers
-http-response set-header Access-Control-Allow-Origin "https://kube.pewty.fr"
-http-response set-header Access-Control-Allow-Headers "*"
-http-response set-header Access-Control-Max-Age 600
-http-response set-header Access-Control-Allow-Methods "GET, OPTIONS, POST, PUT, PATCH, DELETE"
-
-# Handle option request for CORS
-acl is_option method OPTIONS
-http-request set-method GET if is_option
-http-request set-path /readyz if is_option
-```
-
-#### Option 3: install Helm chart
-
-Helm chart can provide HAProxy already configured, with all needed CRD for Schwifty customization.
-
-WARNING: avoid exposing your Kubernetes API publicly through ingress. Please use VPN or port-forwarding. Schwifty is running entirely in your browser, and can access your Kubernetes clusters through your VPN.
-
-```
-helm upgrade --install schwifty chart/ -f chart/values.yaml
-```
 
 ## Values
 
@@ -139,3 +101,48 @@ Define what fields are displayed on view/edition page:
 | block         | Default type. Display all content as block. Can be a map.   |
 | fields        | More compact. Can only be a string.                         |
 | base64fields  | Allow base64 decoding.                                      |
+
+### Authentications
+
+#### Basic auth
+
+##### Generate users
+
+We recommand that end user hash its password and send it to Schwifty administrator:
+```
+echo -n "my-super-password" | sha256sum
+> 819f7644f7883384ffdf2522826d38afeafb4338374e71cdeff315e8831e0c6f
+```
+
+Then Schwifty administrator hash it again ading server salt:
+```
+SALT="aith7eCh6Vohwahgh5zuzah0fieh5h"; echo -n "819f7644f7883384ffdf2522826d38afeafb4338374e71cdeff315e8831e0c6f$SALT" | sha256sum
+> 1d7427cc7ac11f0fb70808c32a7114c4f833ad1c58f770d1c52cc9786a93678d
+```
+
+Or a one-liner:
+```
+PASSWORD=$(echo -n "my-super-password" | sha256sum | awk '{print $1}'); SALT="aith7eCh6Vohwahgh5zuzah0fieh5h"; echo -n "$PASSWORD$SALT" | sha256sum
+```
+
+Then store that password:
+```
+api:
+  authentication:
+    basic:
+      salt: aith7eCh6Vohwahgh5zuzah0fieh5h
+      users:
+        - username: "j.smith"
+          password: "1d7427cc7ac11f0fb70808c32a7114c4f833ad1c58f770d1c52cc9786a93678d"
+          groups:
+            - "reader"
+```
+
+
+## Test
+
+```
+k3d cluster create -c k3d-config.yaml
+kubectl create ns schwifty
+helm upgrade --install schwifty -n schwifty chart/ -f chart/values.yaml
+```
