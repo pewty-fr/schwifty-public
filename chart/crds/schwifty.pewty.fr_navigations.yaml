@@ -74,8 +74,6 @@ spec:
                     type: string
                 required:
                 - enabled
-                - icon
-                - label
                 type: object
             required:
             - items

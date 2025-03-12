@@ -41,7 +41,7 @@ spec:
             properties:
               action:
                 type: string
-              editView:
+              getView:
                 type: string
               groupSelector:
                 type: string
@@ -51,7 +51,7 @@ spec:
                 type: string
             required:
             - action
-            - editView
+            - getView
             - groupSelector
             - listView
             - navigation

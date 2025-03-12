@@ -7,7 +7,7 @@ image:
   name: "schwifty"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "2025-03-07T10-44-15Z-SNAPSHOT"
+  tag: "2025-03-12T19-34-49Z-SNAPSHOT"
 
 env: []
 
@@ -18,9 +18,10 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set fullname is used
-  name: "schwfity-back"
+  name: "schwifty-back"
 
-podAnnotations: {}
+podAnnotations:
+  checksum/config: '{{ toYaml $.Values.config | sha256sum }}'
 
 # -- https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 podSecurityContext:
@@ -119,19 +120,19 @@ customizations:
     action: default
     navigation: admin
     listView: default
-    editView: default
+    getView: default
   dev:
     groupSelector: "schwifty-dev-users"
     action: default
     navigation: dev
     listView: default
-    editView: default
+    getView: default
   support:
     groupSelector: "schwifty-support-users"
     action: default
     navigation: support
     listView: default
-    editView: default
+    getView: default
 
 actions:
   default:
@@ -139,7 +140,7 @@ actions:
       include:
         - "*"
       exclude: []
-    update:
+    edit:
       include:
         - "*"
       exclude: []
@@ -152,6 +153,11 @@ actions:
         - "*"
       exclude: []
     cordon:
+      include: []
+        # - "nodes"
+      exclude:
+        - "*"
+    uncordon:
       include: []
         # - "nodes"
       exclude:
@@ -197,6 +203,13 @@ actions:
         # - "helm.toolkit.fluxcd.io/helmreleases"
         # - "kustomize.toolkit.fluxcd.io/kustomizations"
         # - "source.toolkit.fluxcd.io/gitrepositories"
+      exclude:
+        - "*"
+    scale:
+      include: []
+        # - "apps/deployments"
+        # - "apps/statefulsets"
+        # - "apps/replicasets"
       exclude:
         - "*"
 
@@ -495,7 +508,7 @@ navigations:
         icon: "57918"
         route: "events"
 
-lists:
+listViews:
   default:
     - resourceSelector: nodes
       items:
@@ -607,7 +620,7 @@ lists:
         - label: "Ready"
           key: '$.status.conditions[?(@.type=="Ready")].status'
 
-edits:
+getViews:
   default:
     - resourceSelector: "*"
       items:
@@ -676,7 +689,6 @@ config:
           authenticationRef: "{{ (index .Values.config.api.discovery.clusters 0).name }}"
           discoveryRef: "{{ (index .Values.config.api.discovery.clusters 0).name }}"
     authentication:
-      enabled: true
       noAuth:
         enabled: false
         groups: []
@@ -707,5 +719,5 @@ config:
           usernameClaim: "cognito:username"
           groupsPrefix: "schwifty-"
   port:
-    main: 16666
+    api: 16666
     portforward: 16667

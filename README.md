@@ -23,11 +23,13 @@ helm upgrade --install schwifty -n schwifty chart/ -f chart/values.yaml
 
 ### Configuration
 
-| Parameter               | Type   | Description                                               |
-|-------------------------|--------|-----------------------------------------------------------|
-| `config.logLevel`       | string | Log level: debug, info, warning, error, fatal             |
-| `config.originUrl`      | string | Used to add CORS headers. Default `https://kube.pewty.fr` |
-| `config.portforwardUrl` | string | Used for security check during portforwarding             |
+| Parameter                 | Type   | Description                                               |
+|---------------------------|--------|-----------------------------------------------------------|
+| `config.logLevel`         | string | Log level: debug, info, warning, error, fatal             |
+| `config.originUrl`        | string | Used to add CORS headers. Default `https://kube.pewty.fr` |
+| `config.portforwardUrl`   | string | Used for security check during portforwarding             |
+| `config.port.api`         | string | Api port                                                  |
+| `config.port.portforward` | string | Portforward port                                          |
 
 ### Discovery
 
@@ -78,19 +80,20 @@ Define what your user can do on each resource:
 
 #### Available actions
 
-| Action  | Description                                       |
-|---------|---------------------------------------------------|
-| get     | Display details of Kubernetes resource            |
-| update  | Allow edition of Kubernetes resource              |
-| delete  | Allow deletion of Kubernetes resource             |
-| create  | Allow creation of Kubernetes resource             |
-| cordon  | Cordon a node                                     |
-| drain   | Drain a node                                      |
-| exec    | Start a terminal on pod                           |
-| logs    | Display logs of pod                               |
-| sync    | Add an annotation to trigger update of resource   |
-| pause   | Pause a FluxCD resource                           |
-| resume  | Resume a FluxCD resource                          |
+| Action      | Description                                       |
+|-------------|---------------------------------------------------|
+| get         | Display details of Kubernetes resource            |
+| update      | Allow edition of Kubernetes resource              |
+| delete      | Allow deletion of Kubernetes resource             |
+| create      | Allow creation of Kubernetes resource             |
+| cordon      | Cordon a node                                     |
+| drain       | Drain a node                                      |
+| exec        | Start a terminal on pod                           |
+| logs        | Display logs of pod                               |
+| portforward | Display http endpoint of pods                     |
+| sync        | Add an annotation to trigger update of resource   |
+| pause       | Pause a FluxCD resource                           |
+| resume      | Resume a FluxCD resource                          |
 
 ### Navigations
 
@@ -121,19 +124,19 @@ Defines the columns to display for each Kubernetes resource. If undefined, use d
 | `lists.*.*.width`       | int    | Width allocated in table                                          |
 | `lists.*.*.selectable`  | bool   | If text is selectable                                             |
 
-### Edits
+### Get
 
-Define what fields are displayed on view/edition page:
+Define what fields are displayed on page for unique resource:
 
-| Parameter               | Type   | Description                                                       |
-|-------------------------|--------|-------------------------------------------------------------------|
-| `edits.*`               | string | Name of the edit block                                            |
-| `edits.*.*`             | string | Kubernetes resource name like `namespaces` or `apps/deployments`  |
-| `edits.*.*.*.label`     | string | Label of column                                                   |
-| `edits.*.*.*.key`       | string | JSON Path selection of value                                      |
-| `edits.*.*.*.type`      | string | See edit types                                                    |
+| Parameter             | Type   | Description                                                       |
+|-----------------------|--------|-------------------------------------------------------------------|
+| `get.*`               | string | Name of the edit block                                            |
+| `get.*.*`             | string | Kubernetes resource name like `namespaces` or `apps/deployments`  |
+| `get.*.*.*.label`     | string | Label of column                                                   |
+| `get.*.*.*.key`       | string | JSON Path selection of value                                      |
+| `get.*.*.*.type`      | string | See get types                                                    |
 
-#### Edit types
+#### Get types
 
 | Type          | Description                                                 |
 |---------------|-------------------------------------------------------------|
@@ -143,12 +146,6 @@ Define what fields are displayed on view/edition page:
 | field         | Must be a string                                            |
 
 ### Authentications
-
-In a multi-cluster setup, you can define one Schwifty Backend as your authentication endpoint. It will be responsible to authenticate your users.
-
-| Parameter                           | Type | Description |
-|-------------------------------------|------|-------------|
-| `config.api.authentication.enabled` | bool | Enable      |
 
 #### No auth
 
@@ -198,6 +195,12 @@ users:
     groups:
       - "reader"
 ```
+
+| Parameter          | Type         | Description                                      |
+|--------------------|--------------|--------------------------------------------------|
+| `users.*.username` | string       | Username                                         |
+| `users.*.password` | string       | Password (user hash -> admin salt -> admin hash) |
+| `users.*.groups`   | list(string) | Groups used for Impersonation                    |
 
 #### OIDC
 

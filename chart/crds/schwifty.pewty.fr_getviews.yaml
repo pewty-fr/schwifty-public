@@ -4,20 +4,20 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.16.1
-  name: editviews.schwifty.pewty.fr
+  name: getviews.schwifty.pewty.fr
 spec:
   group: schwifty.pewty.fr
   names:
-    kind: EditView
-    listKind: EditViewList
-    plural: editviews
-    singular: editview
+    kind: GetView
+    listKind: GetViewList
+    plural: getviews
+    singular: getview
   scope: Namespaced
   versions:
   - name: v1
     schema:
       openAPIV3Schema:
-        description: EditView is the Schema for the edits API
+        description: GetView is the Schema for the edits API
         properties:
           apiVersion:
             description: |-
@@ -38,7 +38,7 @@ spec:
             type: object
           spec:
             items:
-              description: EditViewSpec defines the desired state of EditView
+              description: GetViewSpec defines the desired state of GetView
               properties:
                 items:
                   items:
@@ -66,7 +66,7 @@ spec:
               type: object
             type: array
           status:
-            description: EditViewStatus defines the observed state of EditView
+            description: GetViewStatus defines the observed state of GetView
             type: object
         type: object
     served: true

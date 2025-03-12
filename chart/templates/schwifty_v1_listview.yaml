@@ -1,4 +1,4 @@
-{{- range $name,$list := .Values.lists }}
+{{- range $name,$list := .Values.listViews }}
 ---
 apiVersion: schwifty.pewty.fr/v1
 kind: ListView

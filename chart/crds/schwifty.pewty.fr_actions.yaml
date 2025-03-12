@@ -37,189 +37,20 @@ spec:
           metadata:
             type: object
           spec:
-            description: ActionSpec defines the desired state of Action
-            properties:
-              cordon:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              create:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              delete:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              drain:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              exec:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              get:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              logs:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              pause:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              portforward:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              resume:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              sync:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-              update:
-                properties:
-                  exclude:
-                    items:
-                      type: string
-                    type: array
-                  include:
-                    items:
-                      type: string
-                    type: array
-                required:
-                - exclude
-                - include
-                type: object
-            required:
-            - cordon
-            - create
-            - delete
-            - drain
-            - exec
-            - get
-            - logs
-            - pause
-            - portforward
-            - resume
-            - sync
-            - update
+            additionalProperties:
+              properties:
+                exclude:
+                  items:
+                    type: string
+                  type: array
+                include:
+                  items:
+                    type: string
+                  type: array
+              required:
+              - exclude
+              - include
+              type: object
             type: object
           status:
             description: ActionStatus defines the observed state of Action
