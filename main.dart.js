@@ -31152,16 +31152,10 @@ awL:function awL(a,b){this.a=a
 this.b=b},
 awP:function awP(a){this.a=a},
 awO:function awO(a){this.a=a},
-b_u(a){var s=J.ab(a),r=s.h(a,"token")
-if(r==null)r=""
-s=s.h(a,"username")
-return new A.RR(r,s==null?"":s)},
-aWS(a){var s,r=J.ab(a),q=r.h(a,"idToken")
-if(q==null)q=""
-s=r.h(a,"refreshToken")
-if(s==null)s=""
-r=r.h(a,"username")
-return new A.ash(q,s,r==null?"":r)},
+b_u(a){var s=J.ab(a)
+return new A.RR(s.h(a,"token"),s.h(a,"username"))},
+aWS(a){var s=J.ab(a)
+return new A.ash(s.h(a,"accessToken"),s.h(a,"refreshToken"),s.h(a,"username"))},
 qy:function qy(a,b){this.a=a
 this.b=b},
 ac8:function ac8(){},
@@ -108420,7 +108414,7 @@ $S:58}
 A.RR.prototype={
 bl(){return A.Z(["token",this.a],t.N,t.z)}}
 A.ash.prototype={
-bl(){return A.Z(["idToken",this.a,"refreshToken",this.b,"username",this.c],t.N,t.z)}}
+bl(){return A.Z(["accessToken",this.a,"refreshToken",this.b,"username",this.c],t.N,t.z)}}
 A.aca.prototype={
 rE(a,b,c,d,e,f){return this.aGK(a,b,c,d,e,f)},
 jT(a,b,c,d,e){return this.rE(a,b,c,d,e,0)},
