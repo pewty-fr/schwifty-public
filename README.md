@@ -1,6 +1,6 @@
 # schwifty
 
-<img src="image/schwifty-logo.png" alt="logo" width="200" height="200" href="https://kube.pewty.fr/#/discovery?endpoint=https://schwifty-demo.pewty.fr:16666">
+<img src="image/schwifty-logo.png" alt="logo" width="200" href="https://kube.pewty.fr/#/discovery?endpoint=https://schwifty-demo.pewty.fr:16666">
 
 Fully customizable & Secure Kubernetes UI.
 
@@ -10,7 +10,7 @@ All data stays in your browser. No external SaaS is used.
 
 Schwifty is made to help non-Kubernetes experts to enjoy their needed resources.
 
-## Features
+## Features
 
 - Authentication: 
   - No Auth
@@ -26,7 +26,9 @@ Schwifty is made to help non-Kubernetes experts to enjoy their needed resources.
   
 - Portforward: in browser access to HTTP app
 
-### To come
+- Multi clusters access & automatic discovery (no setup needed for your customers!)
+
+## Features to come
 
 - Customizations:
   - Actions :
@@ -45,12 +47,12 @@ Schwifty is made to help non-Kubernetes experts to enjoy their needed resources.
 
 - Windows / Linux app
 
-
-## Demo
+## Demo
 
 [You can try Schwifty here](https://kube.pewty.fr/#/discovery?endpoint=https://schwifty-demo.pewty.fr:16666)
 
 You can login using the next accounts (read-only).
+
 Note that each account has a differently customized view, explore them ! 😉
 
 ```
@@ -64,7 +66,7 @@ Note that each account has a differently customized view, explore them ! 😉
 
 ## Getting Started
 
-Schwifty is running entirely in your browser. All your data stay in browser and in your Kubernetes clusters.
+Schwifty is running entirely in your browser. All your data stays in browser and in your Kubernetes clusters.
 
 <img src="image/schwifty-network.drawio.png" alt="schwifty-network" width="600" >
 
@@ -143,6 +145,7 @@ Define what your user can do on each resource:
 | delete      | Allow deletion of Kubernetes resource             |
 | create      | Allow creation of Kubernetes resource             |
 | cordon      | Cordon a node                                     |
+| uncordon    | Uncordon a node                                   |
 | drain       | Drain a node                                      |
 | exec        | Start a terminal on pod                           |
 | logs        | Display logs of pod                               |
@@ -165,32 +168,33 @@ Define what resource are accessible from navigation:
 | `navigations.*.items.*.items` | list   | Second level of nav                                                                                       |
 | `navigations.*.other.enabled` | bool   | Special nav for all unhandled Kubernetes resources                                                        |
 | `navigations.*.other.label`   | string | Label for this special nav                                                                                |
+| `navigations.*.other.icon`    | string | Icon for this special nav                                                                                |
 
 ### Lists
 
-Defines the columns to display for each Kubernetes resource. If undefined, use default Kubernetes columns:
+Defines the columns to display for each Kubernetes resource. If undefined, it displays: Name, Namespace and Creation Date.
 
-| Parameter               | Type   | Description                                                       |
-|-------------------------|--------|-------------------------------------------------------------------|
-| `lists.*`               | string | Name of the list block                                            |
-| `lists.*.*`             | string | Kubernetes resource name like `namespaces` or `apps/deployments`  |
-| `lists.*.*.*.label`     | string | Label of column                                                   |
-| `lists.*.*.*.key`       | string | JSON Path selection of value                                      |
-| `lists.*.*.*.type`      | string | Unused                                                            |
-| `lists.*.*.width`       | int    | Width allocated in table                                          |
-| `lists.*.*.selectable`  | bool   | If text is selectable                                             |
+| Parameter                   | Type   | Description                                                       |
+|-----------------------------|--------|-------------------------------------------------------------------|
+| `listViews.*`               | string | Name of the list block                                            |
+| `listViews.*.*`             | string | Kubernetes resource name like `namespaces` or `apps/deployments`  |
+| `listViews.*.*.*.label`     | string | Label of column                                                   |
+| `listViews.*.*.*.key`       | string | JSON Path selection of value                                      |
+| `listViews.*.*.*.type`      | string | Unused                                                            |
+| `listViews.*.*.width`       | int    | Width allocated in table                                          |
+| `listViews.*.*.selectable`  | bool   | If text is selectable                                             |
 
 ### Get
 
 Define what fields are displayed on page for unique resource:
 
-| Parameter             | Type   | Description                                                       |
-|-----------------------|--------|-------------------------------------------------------------------|
-| `get.*`               | string | Name of the edit block                                            |
-| `get.*.*`             | string | Kubernetes resource name like `namespaces` or `apps/deployments`  |
-| `get.*.*.*.label`     | string | Label of column                                                   |
-| `get.*.*.*.key`       | string | JSON Path selection of value                                      |
-| `get.*.*.*.type`      | string | See get types                                                    |
+| Parameter                  | Type   | Description                                                       |
+|----------------------------|--------|-------------------------------------------------------------------|
+| `getViews.*`               | string | Name of the edit block                                            |
+| `getViews.*.*`             | string | Kubernetes resource name like `namespaces` or `apps/deployments`  |
+| `getViews.*.*.*.label`     | string | Label of column                                                   |
+| `getViews.*.*.*.key`       | string | JSON Path selection of value                                      |
+| `getViews.*.*.*.type`      | string | See get types                                                     |
 
 #### Get types
 
@@ -212,7 +216,7 @@ Directly use Impersonation on the configured groups.
 | `config.api.authentication.noAuth.enabled` | bool         | Enable                            |
 | `config.api.authentication.noAuth.groups`  | list(string) | List of groups use to Impersonate |
 
-#### Basic auth
+#### Basic
 
 Schwifty Backend authenticate users against a list of credentials stored in Kubernetes. Once authenticated, it uses Impersonation with user groups.
 
@@ -226,12 +230,14 @@ Schwifty Backend authenticate users against a list of credentials stored in Kube
 ##### Generate users credentials
 
 We recommand that end user hash its password and send it to Schwifty administrator:
+
 ```
 echo -n "my-super-password" | sha256sum
 > 819f7644f7883384ffdf2522826d38afeafb4338374e71cdeff315e8831e0c6f
 ```
 
-Then Schwifty administrator hash it again ading server salt:
+Then Schwifty administrator hash it again adding server salt:
+
 ```
 SALT="aith7eCh6Vohwahgh5zuzah0fieh5h"; echo -n "819f7644f7883384ffdf2522826d38afeafb4338374e71cdeff315e8831e0c6f$SALT" | sha256sum
 > 1d7427cc7ac11f0fb70808c32a7114c4f833ad1c58f770d1c52cc9786a93678d
