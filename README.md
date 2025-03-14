@@ -1,10 +1,66 @@
 # schwifty
 
-<img src="image/schwifty-logo.png" alt="logo" width="200" height="200">
+<img src="image/schwifty-logo.png" alt="logo" width="200" height="200" href="https://kube.pewty.fr/#/discovery?endpoint=https://schwifty-demo.pewty.fr:16666">
 
-Fully customizable Kubernetes web view.
+Fully customizable & Secure Kubernetes UI.
 
 You can define different views depending on the group of the connected users.
+
+All data stays in your browser. No external SaaS is used.
+
+Schwifty is made to help non-Kubernetes experts to enjoy their needed resources.
+
+## Features
+
+- Authentication: 
+  - No Auth
+  - Basic
+  - OpenIDConnect (External or Kubernetes)
+
+- Customizations:
+  - All components can be defined per user group
+  - Navigation can use any CRD
+  - List views columns
+  - Get views content
+  - Actions (get, edit, delete, cordon, uncordon, drain, portforward, logs, FluxCD Sync, FluxCD Pause, FluxCD Resume)
+  
+- Portforward: in browser access to HTTP app
+
+### To come
+
+- Customizations:
+  - Actions :
+    - exec
+    - scale
+    - dynamic redirect: button that redirect to a link containing resource data. For example, a link to Grafana panel, containing pod name in query parameters.
+    - Velero: to trigger backup on a PV or PVC.
+    - Secrets Manager: to force sync a secret.
+  - Define customization per platform
+
+- Integrate Grafana panels to home page or get views
+  
+- Portforward: handle basic auth in browser
+
+- Android/iOS app
+
+- Windows / Linux app
+
+
+## Demo
+
+[You can try Schwifty here](https://kube.pewty.fr/#/discovery?endpoint=https://schwifty-demo.pewty.fr:16666)
+
+You can login using the next accounts (read-only).
+Note that each account has a differently customized view, explore them ! 😉
+
+```
+- username: schwifty-admin
+  password: schwifty
+- username: schwifty-dev
+  password: schwifty
+- username: schwifty-support
+  password: schwifty
+```
 
 ## Getting Started
 
