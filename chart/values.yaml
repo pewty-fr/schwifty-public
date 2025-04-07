@@ -7,7 +7,7 @@ image:
   name: "schwifty"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "2025-03-14T16-10-08Z-SNAPSHOT"
+  tag: "2025-04-07T08-03-46Z-SNAPSHOT"
 
 env: []
 
@@ -669,7 +669,7 @@ users:
 
 config:
   logLevel: info
-  originUrl: "https://kube.pewty.fr"
+  originUrl: "https://app.schwifty.fr"
   portforwardUrl: "https://portforward.example.com"
   api:
     customization:
