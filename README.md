@@ -49,7 +49,7 @@ Schwifty is made to help non-Kubernetes experts to enjoy their needed resources.
 
 ## Demo
 
-[You can try Schwifty here](https://app.schwifty.fr/#/discovery?endpoint=https://demo.schwifty.fr:16666)
+[You can try Schwifty here](https://app.schwifty.fr/#/discovery?endpoint=https://demo.schwifty.fr)
 
 You can login using the next accounts (read-only).
 
