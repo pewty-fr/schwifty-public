@@ -404,8 +404,8 @@ navigations:
         items:
           - label: "Customization"
             route: "schwifty.pewty.fr/customizations"
-          - label: "EditView"
-            route: "schwifty.pewty.fr/editviews"
+          - label: "GetView"
+            route: "schwifty.pewty.fr/getviews"
           - label: "Action"
             route: "schwifty.pewty.fr/actions"
           - label: "Navigation"
