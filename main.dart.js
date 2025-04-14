@@ -109448,7 +109448,7 @@ A.avU.prototype={
 $1(a){return a.ba()},
 $S:789}
 A.Jn.prototype={
-Iz(a,b){var s,r,q,p,o,n,m,l,k,j,i=null,h=A.bu("({{.*}})",!0,!1,!1).ks(0,a),g=A.U(h,!0,A.p(h).i("l.E"))
+Iz(a,b){var s,r,q,p,o,n,m,l,k,j,i=null,h=A.bu("({{[^}]*}})",!0,!1,!1).ks(0,a),g=A.U(h,!0,A.p(h).i("l.E"))
 for(h=g.length,s=b.a,r=t.Ah,q=t.R_,p=t.X,o=0;o<h;++o){n=g[o]
 m=n.h(0,0)
 m.toString
