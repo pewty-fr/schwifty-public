@@ -7,7 +7,7 @@ image:
   name: "schwifty"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "2025-04-07T08-03-46Z-SNAPSHOT"
+  tag: "2025-04-14T06-18-39Z-SNAPSHOT"
 
 env: []
 
@@ -142,31 +142,23 @@ actions:
       include:
         - "*"
       exclude: []
-    edit:
-      include:
-        - "*"
-      exclude: []
-    delete:
-      include:
-        - "*"
-      exclude: []
     create:
       include:
         - "*"
       exclude: []
     cordon:
-      include: []
-        # - "nodes"
+      include:
+        - "nodes"
       exclude:
         - "*"
     uncordon:
-      include: []
-        # - "nodes"
+      include:
+        - "nodes"
       exclude:
         - "*"
     drain:
-      include: []
-        # - "nodes"
+      include:
+        - "nodes"
       exclude:
         - "*"
     exec:
@@ -184,37 +176,121 @@ actions:
         - "pods"
       exclude:
         - "*"
-    sync:
-      include: []
-        # - "helm.toolkit.fluxcd.io/helmreleases"
-        # - "kustomize.toolkit.fluxcd.io/kustomizations"
-        # - "source.toolkit.fluxcd.io/gitrepositories"
-        # - "external-secrets.io/externalsecrets"
-        # - "external-secrets.io/pushsecrets"
+    restart:
+      include:
+        - "apps/deployments"
+        - "apps/statefulsets"
+        - "apps/daemonset"
       exclude:
         - "*"
-    pause:
-      include: []
-        # - "helm.toolkit.fluxcd.io/helmreleases"
-        # - "kustomize.toolkit.fluxcd.io/kustomizations"
-        # - "source.toolkit.fluxcd.io/gitrepositories"
-      exclude:
-        - "*"
-    resume:
-      include: []
-        # - "helm.toolkit.fluxcd.io/helmreleases"
-        # - "kustomize.toolkit.fluxcd.io/kustomizations"
-        # - "source.toolkit.fluxcd.io/gitrepositories"
-      exclude:
-        - "*"
+      verb: 'patch'
+      title: 'Restart'
+      icon: '58927'
+      payloadTemplate: |
+        {
+          "spec": {
+            "template": {
+              "metadata": {
+                "annotations": {
+                  "schwifty.pewty.fr/update": "{{datenow}}"
+                }
+              }
+            }
+          }
+        }
+      parameters: []
     scale:
-      include: []
-        # - "apps/deployments"
-        # - "apps/statefulsets"
-        # - "apps/replicasets"
+      include:
+        - "apps/deployments"
+        - "apps/statefulsets"
+        - "apps/replicasets"
       exclude:
         - "*"
-
+      verb: 'patch'
+      title: 'Scale'
+      icon: '57730'
+      payloadTemplate: |
+        {
+          "spec": {
+            "replicas": {{replicas}}
+          }
+        }
+      parameters:
+        - name: "replicas"
+          defaultValue: "1"
+          description: "Number of replicas"
+    sync:
+      include:
+        - "helm.toolkit.fluxcd.io/helmreleases"
+        - "kustomize.toolkit.fluxcd.io/kustomizations"
+        - "source.toolkit.fluxcd.io/gitrepositories"
+        - "external-secrets.io/externalsecrets"
+        - "external-secrets.io/pushsecrets"
+      exclude:
+        - "*"
+      verb: 'patch'
+      title: 'Sync'
+      icon: '58927'
+      payloadTemplate: |
+        {
+          "metadata": {
+            "annotations": {
+              "schwifty.pewty.fr/update": "{{datenow}}"
+            }
+          }
+        }
+      parameters: []
+    pause:
+      include:
+        - "helm.toolkit.fluxcd.io/helmreleases"
+        - "kustomize.toolkit.fluxcd.io/kustomizations"
+        - "source.toolkit.fluxcd.io/gitrepositories"
+      exclude:
+        - "*"
+      verb: 'patch'
+      title: 'Pause'
+      icon: '58492'
+      payloadTemplate: |
+        {
+          "spec": {
+            "suspend": true
+          }
+        }
+      parameters: []
+    resume:
+      include:
+        - "helm.toolkit.fluxcd.io/helmreleases"
+        - "kustomize.toolkit.fluxcd.io/kustomizations"
+        - "source.toolkit.fluxcd.io/gitrepositories"
+      exclude:
+        - "*"
+      verb: 'patch'
+      title: 'Resume'
+      icon: '58573'
+      payloadTemplate: |
+        {
+          "spec": {
+            "suspend": false
+          }
+        }
+      parameters: []
+    edit:
+      include:
+        - "*"
+      exclude: []
+    delete:
+      include:
+        - "*"
+      exclude: []
+    # grafana:
+    #   include:
+    #     - "pods"
+    #   exclude: []
+    #   verb: 'link'
+    #   title: 'Grafana'
+    #   icon: 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg'
+    #   payloadTemplate: "https://grafana.schwifty.fr/d/Schwifty/pods?orgId=1&var-namespace={{$.metadata.namespace}}&var-pod={{$.metadata.name}}"
+    #   parameters: []
 navigations:
   admin:
     other:
@@ -626,32 +702,24 @@ getViews:
   default:
     - resourceSelector: "*"
       items:
-        - label: 'Name'
-          key: '$.metadata.namespace'
-          type: fields
-        - label: "Annotations"
-          key: "$.metadata.annotations"
-          type: fields
-        - label: "Labels"
-          key: "$.metadata.labels"
-          type: fields
+        - label: "Metadata"
+          key: "$.metadata"
+        - label: "Spec"
+          key: "$.spec"
         - label: "Status"
           key: "$.status"
-          subresource: status
     - resourceSelector: configmaps
       items:
         - label: "Metadata"
           key: "$.metadata"
         - label: "Data"
           key: "$.data"
-          type: block
     - resourceSelector: secrets
       items:
         - label: "Metadata"
           key: "$.metadata"
         - label: "Data"
           key: "$.data"
-          type: base64fields
 
 users:
   - username: "admin"

@@ -129,19 +129,28 @@ Define what customization parameters for which user's group:
 
 Define what your user can do on each resource:
 
-| Parameter             | Type   | Description                                              |
-|-----------------------|--------|----------------------------------------------------------|
-| `actions.*`           | string | Name of the action block                                 |
-| `actions.*.*`         | string | Name of the action                                       |
-| `actions.*.*.include` | list   | Enable an action for a list of Kubernetes resources      |
-| `actions.*.*.exclude` | list   | Disable an action for a list of Kubernetes resources     |
+| Parameter                               | Type   | Description                                                                                                             |
+|-----------------------------------------|--------|-------------------------------------------------------------------------------------------------------------------------|
+| `actions.*`                             | string | Name of the action block                                                                                                |
+| `actions.*.*`                           | string | Name of the action                                                                                                      |
+| `actions.*.*.include`                   | list   | Enable an action for a list of Kubernetes resources                                                                     |
+| `actions.*.*.exclude`                   | list   | Disable an action for a list of Kubernetes resources                                                                    |
+| `actions.*.*.verb`                      | string | For custom actions, can be `patch`, `create` or `link`                                                                  |
+| `actions.*.*.title`                     | string | Name of custom action                                                                                                   |
+| `actions.*.*.icon`                      | string | Icon of custom action (can be svg or png or [int](https://api.flutter.dev/flutter/material/Icons-class.html#constants)) |
+| `actions.*.*.payloadTemplate`           | string | JSON Payload used with custom action                                                                                    |
+| `actions.*.*.parameters.*.name`         | string | Name of parameter used by custom action                                                                                 |
+| `actions.*.*.parameters.*.defaultValue` | string | Default value of parameter                                                                                              |
+| `actions.*.*.parameters.*.description`  | string | Description fo parameter                                                                                                |
 
-#### Available actions
+include & exclude list allow to enable or disable an action for a given resource.
+
+#### Predefined actions
 
 | Action      | Description                                       |
 |-------------|---------------------------------------------------|
 | get         | Display details of Kubernetes resource            |
-| update      | Allow edition of Kubernetes resource              |
+| edit        | Allow edition of Kubernetes resource              |
 | delete      | Allow deletion of Kubernetes resource             |
 | create      | Allow creation of Kubernetes resource             |
 | cordon      | Cordon a node                                     |
@@ -150,9 +159,57 @@ Define what your user can do on each resource:
 | exec        | Start a terminal on pod                           |
 | logs        | Display logs of pod                               |
 | portforward | Display http endpoint of pods                     |
-| sync        | Add an annotation to trigger update of resource   |
-| pause       | Pause a FluxCD resource                           |
-| resume      | Resume a FluxCD resource                          |
+
+#### Custom actions
+
+You can defined your own action on a given resource.
+
+##### Link
+
+To create an action that open a grafana dashboard link based on pod resource:
+
+```
+grafana:
+  include:
+    - "pods"
+  exclude: []
+  verb: 'link'
+  title: 'Grafana'
+  icon: 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg'
+  payloadTemplate: "https://grafana.schwifty.fr/d/Schwifty/pods?orgId=1&var-namespace={{$.metadata.namespace}}&var-pod={{$.metadata.name}}"
+  parameters: []
+```
+
+`{{$.metadata.namespace}}` is a JsonPath that will get namespace value from clicked pod and replace it in URL.
+
+##### Create / Patch
+
+```
+scale:
+  include:
+    - "apps/deployments"
+    - "apps/statefulsets"
+    - "apps/replicasets"
+  exclude:
+    - "*"
+  verb: 'patch'
+  title: 'Scale'
+  icon: '57730'
+  payloadTemplate: |
+    {
+      "spec": {
+        "replicas": {{replicas}}
+      }
+    }
+  parameters:
+    - name: "replicas"
+      defaultValue: "1"
+      description: "Number of replicas"
+```
+
+`{{replicas}}` will be replaced by corresponding parameter value that user will have to define after clicking on action button.
+
+`{{datenow}}` is a special function that will inject current date in payload.
 
 ### Navigations
 
@@ -194,16 +251,7 @@ Define what fields are displayed on page for unique resource:
 | `getViews.*.*`             | string | Kubernetes resource name like `namespaces` or `apps/deployments`  |
 | `getViews.*.*.*.label`     | string | Label of column                                                   |
 | `getViews.*.*.*.key`       | string | JSON Path selection of value                                      |
-| `getViews.*.*.*.type`      | string | See get types                                                     |
 
-#### Get types
-
-| Type          | Description                                                 |
-|---------------|-------------------------------------------------------------|
-| block         | Default type. Display all content as block. Can be a map.   |
-| fields        | More compact. Can be a map.                                 |
-| base64fields  | Allow base64 decoding. Can be a map.                        |
-| field         | Must be a string                                            |
 
 ### Authentications
 

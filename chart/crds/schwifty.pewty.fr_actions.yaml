@@ -43,10 +43,34 @@ spec:
                   items:
                     type: string
                   type: array
+                groupResource:
+                  type: string
+                icon:
+                  type: string
                 include:
                   items:
                     type: string
                   type: array
+                parameters:
+                  items:
+                    properties:
+                      defaultValue:
+                        type: string
+                      description:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                    - description
+                    - name
+                    type: object
+                  type: array
+                payloadTemplate:
+                  type: string
+                title:
+                  type: string
+                verb:
+                  type: string
               required:
               - exclude
               - include

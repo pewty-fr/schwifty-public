@@ -47,12 +47,6 @@ spec:
                         type: string
                       label:
                         type: string
-                      link:
-                        type: string
-                      subresource:
-                        type: string
-                      type:
-                        type: string
                     required:
                     - key
                     - label
