@@ -7,7 +7,7 @@ image:
   name: "schwifty"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "2025-04-14T06-18-39Z-SNAPSHOT"
+  tag: "2025-04-14T16-54-25Z-SNAPSHOT"
 
 env: []
 
