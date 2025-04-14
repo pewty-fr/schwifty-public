@@ -208,7 +208,7 @@ actions:
         - "*"
       verb: 'patch'
       title: 'Scale'
-      icon: '57730'
+      icon: '62475'
       payloadTemplate: |
         {
           "spec": {
