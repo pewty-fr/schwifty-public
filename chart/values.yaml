@@ -405,7 +405,7 @@ navigations:
           - label: "GitRepositories"
             route: "source.toolkit.fluxcd.io/gitrepositories"
       - label: "External Secrets"
-        icon: "https://raw.githubusercontent.com/external-secrets/external-secrets/refs/heads/main/docs/pictures/eso-round-logo.svg"
+        icon: "984363"
         items:
           - label: "External Secrets"
             route: "external-secrets.io/externalsecrets"
