@@ -7,7 +7,7 @@ image:
   name: "schwifty"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "2025-04-15T06-31-59Z-SNAPSHOT"
+  tag: "2025-04-15T06-56-46Z-SNAPSHOT"
 
 env: []
 
@@ -137,30 +137,53 @@ customizations:
 
 actions:
   default:
+    - type: grafana
+      include:
+        - "pods"
+      exclude: []
+      verb: "link"
+      title: "Monitoring"
+      icon: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg"
+      payloadTemplate: "https://grafana.schwifty.fr/d/Schwifty/pods?orgId=1&var-namespace={{$.metadata.namespace}}&var-pod={{$.metadata.name}}"
+      parameters: []
     - type: cordon
       include:
         - "nodes"
+      exclude:
+      - '*'
     - type: uncordon
       include:
         - "nodes"
+      exclude:
+      - '*'
     - type: drain
       include:
         - "nodes"
+      exclude:
+      - '*'
     - type: exec
       include:
         []
         # - "pods"
+      exclude:
+      - '*'
     - type: logs
       include:
         - "pods"
+      exclude:
+      - '*'
     - type: portforward
       include:
         - "pods"
+      exclude:
+      - '*'
     - type: restart
       include:
         - "apps/deployments"
         - "apps/statefulsets"
         - "apps/daemonset"
+      exclude:
+      - '*'
       verb: "patch"
       title: "Restart"
       icon: "58927"
@@ -182,6 +205,8 @@ actions:
         - "apps/deployments"
         - "apps/statefulsets"
         - "apps/replicasets"
+      exclude:
+      - '*'
       verb: "patch"
       title: "Scale"
       icon: "62475"
@@ -202,6 +227,8 @@ actions:
         - "source.toolkit.fluxcd.io/gitrepositories"
         - "external-secrets.io/externalsecrets"
         - "external-secrets.io/pushsecrets"
+      exclude:
+      - '*'
       verb: "patch"
       title: "Sync"
       icon: "58927"
@@ -219,6 +246,8 @@ actions:
         - "helm.toolkit.fluxcd.io/helmreleases"
         - "kustomize.toolkit.fluxcd.io/kustomizations"
         - "source.toolkit.fluxcd.io/gitrepositories"
+      exclude:
+      - '*'
       verb: "patch"
       title: "Pause"
       icon: "58492"
@@ -234,6 +263,8 @@ actions:
         - "helm.toolkit.fluxcd.io/helmreleases"
         - "kustomize.toolkit.fluxcd.io/kustomizations"
         - "source.toolkit.fluxcd.io/gitrepositories"
+      exclude:
+      - '*'
       verb: "patch"
       title: "Resume"
       icon: "58573"
@@ -243,15 +274,6 @@ actions:
             "suspend": false
           }
         }
-      parameters: []
-    - type: grafana
-      include:
-        - "pods"
-      exclude: []
-      verb: "link"
-      title: "Grafana"
-      icon: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg"
-      payloadTemplate: "https://grafana.schwifty.fr/d/Schwifty/pods?orgId=1&var-namespace={{$.metadata.namespace}}&var-pod={{$.metadata.name}}"
       parameters: []
     - type: get
       include:
@@ -569,6 +591,8 @@ listViews:
   default:
     - include:
         - nodes
+      exclude:
+      - '*'
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -583,6 +607,8 @@ listViews:
           width: 2
     - include:
         - pods
+      exclude:
+      - '*'
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -602,6 +628,8 @@ listViews:
           width: 3
     - include:
         - apps/deployments
+      exclude:
+      - '*'
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -615,6 +643,8 @@ listViews:
           type: duration
     - include:
         - helm.toolkit.fluxcd.io/helmreleases
+      exclude:
+      - '*'
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -626,6 +656,8 @@ listViews:
           key: '$.status.conditions[?(@.type=="Ready")].status'
     - include:
         - source.toolkit.fluxcd.io/helmcharts
+      exclude:
+      - '*'
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -642,6 +674,8 @@ listViews:
           key: '$.status.conditions[?(@.type=="Ready")].status'
     - include:
         - source.toolkit.fluxcd.io/helmrepositories
+      exclude:
+      - '*'
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -656,6 +690,8 @@ listViews:
           key: '$.status.conditions[?(@.type=="Ready")].status'
     - include:
         - kustomize.toolkit.fluxcd.io/kustomizations
+      exclude:
+      - '*'
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -667,6 +703,8 @@ listViews:
           key: '$.status.conditions[?(@.type=="Ready")].status'
     - include:
         - source.toolkit.fluxcd.io/gitrepositories
+      exclude:
+      - '*'
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -694,6 +732,8 @@ getViews:
           key: "$.status"
     - include:
         - configmaps
+      exclude:
+      - '*'
       items:
         - label: "Metadata"
           key: "$.metadata"
@@ -701,6 +741,8 @@ getViews:
           key: "$.data"
     - include:
         - secrets
+      exclude:
+      - '*'
       items:
         - label: "Metadata"
           key: "$.metadata"
