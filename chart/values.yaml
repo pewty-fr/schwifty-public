@@ -7,7 +7,7 @@ image:
   name: "schwifty"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "2025-04-14T16-54-25Z-SNAPSHOT"
+  tag: "2025-04-15T06-31-59Z-SNAPSHOT"
 
 env: []
 
@@ -21,7 +21,7 @@ serviceAccount:
   name: "schwifty-back"
 
 podAnnotations:
-  checksum/config: '{{ toYaml $.Values.config | sha256sum }}'
+  checksum/config: "{{ toYaml $.Values.config | sha256sum }}"
 
 # -- https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 podSecurityContext:
@@ -41,10 +41,10 @@ service:
 
   type: ClusterIP
   ports:
-  - name: api
-    port: 16666
-  - name: portforward
-    port: 16667
+    - name: api
+      port: 16666
+    - name: portforward
+      port: 16667
 
 # -- https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -115,7 +115,6 @@ readinessProbe: {}
 # -- https://kubernetes.io/fr/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 startupProbe: {}
 
-
 customizations:
   admin:
     groupSelector: "schwifty-admin-users"
@@ -138,54 +137,33 @@ customizations:
 
 actions:
   default:
-    get:
-      include:
-        - "*"
-      exclude: []
-    create:
-      include:
-        - "*"
-      exclude: []
-    cordon:
+    - type: cordon
       include:
         - "nodes"
-      exclude:
-        - "*"
-    uncordon:
+    - type: uncordon
       include:
         - "nodes"
-      exclude:
-        - "*"
-    drain:
+    - type: drain
       include:
         - "nodes"
-      exclude:
-        - "*"
-    exec:
-      include: []
+    - type: exec
+      include:
+        []
         # - "pods"
-      exclude:
-        - "*"
-    logs:
+    - type: logs
       include:
         - "pods"
-      exclude:
-        - "*"
-    portforward:
+    - type: portforward
       include:
         - "pods"
-      exclude:
-        - "*"
-    restart:
+    - type: restart
       include:
         - "apps/deployments"
         - "apps/statefulsets"
         - "apps/daemonset"
-      exclude:
-        - "*"
-      verb: 'patch'
-      title: 'Restart'
-      icon: '58927'
+      verb: "patch"
+      title: "Restart"
+      icon: "58927"
       payloadTemplate: |
         {
           "spec": {
@@ -199,16 +177,14 @@ actions:
           }
         }
       parameters: []
-    scale:
+    - type: scale
       include:
         - "apps/deployments"
         - "apps/statefulsets"
         - "apps/replicasets"
-      exclude:
-        - "*"
-      verb: 'patch'
-      title: 'Scale'
-      icon: '62475'
+      verb: "patch"
+      title: "Scale"
+      icon: "62475"
       payloadTemplate: |
         {
           "spec": {
@@ -219,18 +195,16 @@ actions:
         - name: "replicas"
           defaultValue: "1"
           description: "Number of replicas"
-    sync:
+    - type: sync
       include:
         - "helm.toolkit.fluxcd.io/helmreleases"
         - "kustomize.toolkit.fluxcd.io/kustomizations"
         - "source.toolkit.fluxcd.io/gitrepositories"
         - "external-secrets.io/externalsecrets"
         - "external-secrets.io/pushsecrets"
-      exclude:
-        - "*"
-      verb: 'patch'
-      title: 'Sync'
-      icon: '58927'
+      verb: "patch"
+      title: "Sync"
+      icon: "58927"
       payloadTemplate: |
         {
           "metadata": {
@@ -240,16 +214,14 @@ actions:
           }
         }
       parameters: []
-    pause:
+    - type: pause
       include:
         - "helm.toolkit.fluxcd.io/helmreleases"
         - "kustomize.toolkit.fluxcd.io/kustomizations"
         - "source.toolkit.fluxcd.io/gitrepositories"
-      exclude:
-        - "*"
-      verb: 'patch'
-      title: 'Pause'
-      icon: '58492'
+      verb: "patch"
+      title: "Pause"
+      icon: "58492"
       payloadTemplate: |
         {
           "spec": {
@@ -257,16 +229,14 @@ actions:
           }
         }
       parameters: []
-    resume:
+    - type: resume
       include:
         - "helm.toolkit.fluxcd.io/helmreleases"
         - "kustomize.toolkit.fluxcd.io/kustomizations"
         - "source.toolkit.fluxcd.io/gitrepositories"
-      exclude:
-        - "*"
-      verb: 'patch'
-      title: 'Resume'
-      icon: '58573'
+      verb: "patch"
+      title: "Resume"
+      icon: "58573"
       payloadTemplate: |
         {
           "spec": {
@@ -274,23 +244,32 @@ actions:
           }
         }
       parameters: []
-    edit:
+    - type: grafana
+      include:
+        - "pods"
+      exclude: []
+      verb: "link"
+      title: "Grafana"
+      icon: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg"
+      payloadTemplate: "https://grafana.schwifty.fr/d/Schwifty/pods?orgId=1&var-namespace={{$.metadata.namespace}}&var-pod={{$.metadata.name}}"
+      parameters: []
+    - type: get
       include:
         - "*"
       exclude: []
-    delete:
+    - type: create
       include:
         - "*"
       exclude: []
-    # grafana:
-    #   include:
-    #     - "pods"
-    #   exclude: []
-    #   verb: 'link'
-    #   title: 'Grafana'
-    #   icon: 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg'
-    #   payloadTemplate: "https://grafana.schwifty.fr/d/Schwifty/pods?orgId=1&var-namespace={{$.metadata.namespace}}&var-pod={{$.metadata.name}}"
-    #   parameters: []
+    - type: edit
+      include:
+        - "*"
+      exclude: []
+    - type: delete
+      include:
+        - "*"
+      exclude: []
+
 navigations:
   admin:
     other:
@@ -588,7 +567,8 @@ navigations:
 
 listViews:
   default:
-    - resourceSelector: nodes
+    - include:
+        - nodes
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -601,8 +581,8 @@ listViews:
         - label: Version
           key: "$.status.nodeInfo.kubeletVersion"
           width: 2
-          selectable: true
-    - resourceSelector: pods
+    - include:
+        - pods
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -617,12 +597,11 @@ listViews:
         - label: "Node"
           key: "$.spec.nodeName"
           width: 5
-          selectable: true
         - label: "Namespace"
           key: "$.metadata.namespace"
           width: 3
-          selectable: true
-    - resourceSelector: apps/deployments
+    - include:
+        - apps/deployments
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -634,7 +613,8 @@ listViews:
         - label: "Age"
           key: "$.metadata.creationTimestamp"
           type: duration
-    - resourceSelector: helm.toolkit.fluxcd.io/helmreleases
+    - include:
+        - helm.toolkit.fluxcd.io/helmreleases
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -644,24 +624,24 @@ listViews:
           type: duration
         - label: "Ready"
           key: '$.status.conditions[?(@.type=="Ready")].status'
-    - resourceSelector: source.toolkit.fluxcd.io/helmcharts
+    - include:
+        - source.toolkit.fluxcd.io/helmcharts
       items:
         - label: "Name"
           key: "$.metadata.name"
           width: 4
         - label: "Chart"
           key: "$.spec.chart"
-          selectable: true
           width: 3
         - label: "Version"
           key: "$.spec.version"
-          selectable: true
         - label: "Age"
           key: "$.metadata.creationTimestamp"
           type: duration
         - label: "Ready"
           key: '$.status.conditions[?(@.type=="Ready")].status'
-    - resourceSelector: source.toolkit.fluxcd.io/helmrepositories
+    - include:
+        - source.toolkit.fluxcd.io/helmrepositories
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -674,7 +654,8 @@ listViews:
           type: duration
         - label: "Ready"
           key: '$.status.conditions[?(@.type=="Ready")].status'
-    - resourceSelector: kustomize.toolkit.fluxcd.io/kustomizations
+    - include:
+        - kustomize.toolkit.fluxcd.io/kustomizations
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -684,7 +665,8 @@ listViews:
           type: duration
         - label: "Ready"
           key: '$.status.conditions[?(@.type=="Ready")].status'
-    - resourceSelector: source.toolkit.fluxcd.io/gitrepositories
+    - include:
+        - source.toolkit.fluxcd.io/gitrepositories
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -700,7 +682,9 @@ listViews:
 
 getViews:
   default:
-    - resourceSelector: "*"
+    - include:
+        - "*"
+      exclude: []
       items:
         - label: "Metadata"
           key: "$.metadata"
@@ -708,13 +692,15 @@ getViews:
           key: "$.spec"
         - label: "Status"
           key: "$.status"
-    - resourceSelector: configmaps
+    - include:
+        - configmaps
       items:
         - label: "Metadata"
           key: "$.metadata"
         - label: "Data"
           key: "$.data"
-    - resourceSelector: secrets
+    - include:
+        - secrets
       items:
         - label: "Metadata"
           key: "$.metadata"
@@ -774,7 +760,7 @@ config:
           clientId: "oidc-client-id"
           clientSecret: "oidc"
           issuerUrl: "https://oidc-issuer-url"
-          redirectUrl: "https://oidc-redirect-url"
+          redirectUrl: "https://app.schwifty.fr/discovery"
           groupsClaim: "cognito:groups"
           usernameClaim: "cognito:username"
           groupsPrefix: "schwifty-"
@@ -784,7 +770,7 @@ config:
           clientId: "oidc-client-id"
           clientSecret: "oidc"
           issuerUrl: "https://oidc-issuer-url"
-          redirectUrl: "https://oidc-redirect-url"
+          redirectUrl: "https://app.schwifty.fr/discovery"
           groupsClaim: "cognito:groups"
           usernameClaim: "cognito:username"
           groupsPrefix: "schwifty-"

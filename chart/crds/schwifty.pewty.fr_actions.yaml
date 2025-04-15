@@ -37,7 +37,7 @@ spec:
           metadata:
             type: object
           spec:
-            additionalProperties:
+            items:
               properties:
                 exclude:
                   items:
@@ -69,13 +69,15 @@ spec:
                   type: string
                 title:
                   type: string
+                type:
+                  type: string
                 verb:
                   type: string
               required:
-              - exclude
               - include
+              - type
               type: object
-            type: object
+            type: array
           status:
             description: ActionStatus defines the observed state of Action
             type: object

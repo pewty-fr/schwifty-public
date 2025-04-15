@@ -40,12 +40,18 @@ spec:
             items:
               description: ListViewSpec defines the desired state of ListView
               properties:
+                exclude:
+                  items:
+                    type: string
+                  type: array
+                include:
+                  items:
+                    type: string
+                  type: array
                 items:
                   items:
                     properties:
                       description:
-                        type: string
-                      format:
                         type: string
                       key:
                         type: string
@@ -55,8 +61,6 @@ spec:
                         type: string
                       priority:
                         type: integer
-                      selectable:
-                        type: boolean
                       type:
                         type: string
                       width:
@@ -66,11 +70,9 @@ spec:
                     - label
                     type: object
                   type: array
-                resourceSelector:
-                  type: string
               required:
+              - include
               - items
-              - resourceSelector
               type: object
             type: array
           status:

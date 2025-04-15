@@ -40,6 +40,14 @@ spec:
             items:
               description: GetViewSpec defines the desired state of GetView
               properties:
+                exclude:
+                  items:
+                    type: string
+                  type: array
+                include:
+                  items:
+                    type: string
+                  type: array
                 items:
                   items:
                     properties:
@@ -52,11 +60,9 @@ spec:
                     - label
                     type: object
                   type: array
-                resourceSelector:
-                  type: string
               required:
+              - include
               - items
-              - resourceSelector
               type: object
             type: array
           status:
