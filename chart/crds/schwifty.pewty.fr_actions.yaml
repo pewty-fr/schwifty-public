@@ -74,6 +74,7 @@ spec:
                 verb:
                   type: string
               required:
+              - exclude
               - include
               - type
               type: object

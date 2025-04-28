@@ -71,6 +71,7 @@ spec:
                     type: object
                   type: array
               required:
+              - exclude
               - include
               - items
               type: object

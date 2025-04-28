@@ -115,6 +115,9 @@ readinessProbe: {}
 # -- https://kubernetes.io/fr/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 startupProbe: {}
 
+rbac:
+  enabled: true
+
 customizations:
   admin:
     groupSelector: "schwifty-admin-users"
@@ -150,40 +153,40 @@ actions:
       include:
         - "nodes"
       exclude:
-      - '*'
+        - "*"
     - type: uncordon
       include:
         - "nodes"
       exclude:
-      - '*'
+        - "*"
     - type: drain
       include:
         - "nodes"
       exclude:
-      - '*'
+        - "*"
     - type: exec
       include:
         []
         # - "pods"
       exclude:
-      - '*'
+        - "*"
     - type: logs
       include:
         - "pods"
       exclude:
-      - '*'
+        - "*"
     - type: portforward
       include:
         - "pods"
       exclude:
-      - '*'
+        - "*"
     - type: restart
       include:
         - "apps/deployments"
         - "apps/statefulsets"
         - "apps/daemonset"
       exclude:
-      - '*'
+        - "*"
       verb: "patch"
       title: "Restart"
       icon: "58927"
@@ -206,7 +209,7 @@ actions:
         - "apps/statefulsets"
         - "apps/replicasets"
       exclude:
-      - '*'
+        - "*"
       verb: "patch"
       title: "Scale"
       icon: "62475"
@@ -228,7 +231,7 @@ actions:
         - "external-secrets.io/externalsecrets"
         - "external-secrets.io/pushsecrets"
       exclude:
-      - '*'
+        - "*"
       verb: "patch"
       title: "Sync"
       icon: "58927"
@@ -247,7 +250,7 @@ actions:
         - "kustomize.toolkit.fluxcd.io/kustomizations"
         - "source.toolkit.fluxcd.io/gitrepositories"
       exclude:
-      - '*'
+        - "*"
       verb: "patch"
       title: "Pause"
       icon: "58492"
@@ -264,7 +267,7 @@ actions:
         - "kustomize.toolkit.fluxcd.io/kustomizations"
         - "source.toolkit.fluxcd.io/gitrepositories"
       exclude:
-      - '*'
+        - "*"
       verb: "patch"
       title: "Resume"
       icon: "58573"
@@ -592,7 +595,7 @@ listViews:
     - include:
         - nodes
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -608,7 +611,7 @@ listViews:
     - include:
         - pods
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -629,7 +632,7 @@ listViews:
     - include:
         - apps/deployments
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -644,7 +647,7 @@ listViews:
     - include:
         - helm.toolkit.fluxcd.io/helmreleases
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -657,7 +660,7 @@ listViews:
     - include:
         - source.toolkit.fluxcd.io/helmcharts
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -675,7 +678,7 @@ listViews:
     - include:
         - source.toolkit.fluxcd.io/helmrepositories
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -691,7 +694,7 @@ listViews:
     - include:
         - kustomize.toolkit.fluxcd.io/kustomizations
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -704,7 +707,7 @@ listViews:
     - include:
         - source.toolkit.fluxcd.io/gitrepositories
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Name"
           key: "$.metadata.name"
@@ -733,7 +736,7 @@ getViews:
     - include:
         - configmaps
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Metadata"
           key: "$.metadata"
@@ -742,7 +745,7 @@ getViews:
     - include:
         - secrets
       exclude:
-      - '*'
+        - "*"
       items:
         - label: "Metadata"
           key: "$.metadata"

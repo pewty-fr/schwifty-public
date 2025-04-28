@@ -81,13 +81,13 @@ helm upgrade --install schwifty -n schwifty chart/ -f chart/values.yaml
 
 ### Configuration
 
-| Parameter                 | Type   | Description                                               |
-|---------------------------|--------|-----------------------------------------------------------|
-| `config.logLevel`         | string | Log level: debug, info, warning, error, fatal             |
-| `config.originUrl`        | string | Used to add CORS headers. Default `https://kube.pewty.fr` |
-| `config.portforwardUrl`   | string | Used for security check during portforwarding             |
-| `config.port.api`         | string | Api port                                                  |
-| `config.port.portforward` | string | Portforward port                                          |
+| Parameter                 | Type   | Description                                                 |
+|---------------------------|--------|-------------------------------------------------------------|
+| `config.logLevel`         | string | Log level: debug, info, warning, error, fatal               |
+| `config.originUrl`        | string | Used to add CORS headers. Default `https://app.schwifty.fr` |
+| `config.portforwardUrl`   | string | Used for security check during portforwarding               |
+| `config.port.api`         | string | Api port                                                    |
+| `config.port.portforward` | string | Portforward port                                            |
 
 ### Discovery
 
@@ -121,9 +121,8 @@ Define what customization parameters for which user's group:
 | `customizations.*.groupSelector`  | string | Regex of SSO user's group to affect this customization        |
 | `customizations.*.action`         | string | Name of custom actions block                                  |
 | `customizations.*.navigation`     | string | Name of custom navigations block                              |
-| `customizations.*.list`           | string | Name of custom lists block                                    |
-| `customizations.*.edit`           | string | Name of custom edits block                                    |
-| `customizations.*.link`           | string | Name of custom links block                                    |
+| `customizations.*.listView`       | string | Name of custom lists block                                    |
+| `customizations.*.getView`        | string | Name of custom get   block                                    |
 
 ### Actions
 
@@ -231,26 +230,33 @@ Define what resource are accessible from navigation:
 
 Defines the columns to display for each Kubernetes resource. If undefined, it displays: Name, Namespace and Creation Date.
 
-| Parameter                   | Type   | Description                                                       |
-|-----------------------------|--------|-------------------------------------------------------------------|
-| `listViews.*`               | string | Name of the list block                                            |
-| `listViews.*.*`             | string | Kubernetes resource name like `namespaces` or `apps/deployments`  |
-| `listViews.*.*.*.label`     | string | Label of column                                                   |
-| `listViews.*.*.*.key`       | string | JSON Path selection of value                                      |
-| `listViews.*.*.*.type`      | string | Unused                                                            |
-| `listViews.*.*.width`       | int    | Width allocated in table                                          |
-| `listViews.*.*.selectable`  | bool   | If text is selectable                                             |
+| Parameter                     | Type   | Description                                                       |
+|-------------------------------|--------|-------------------------------------------------------------------|
+| `listViews.*`                 | string | Name of the list block                                            |
+| `listViews.*.*.include`       | list   | Enable a list view for a list of Kubernetes resources             |
+| `listViews.*.*.exclude`       | list   | Disable a list view action for a list of Kubernetes resources     |
+| `listViews.*.*.items.*.label` | string | Label of column                                                   |
+| `listViews.*.*.items.*.key`   | string | JSON Path selection of value                                      |
+| `listViews.*.*.items.*.type`  | string | See below                                                         |
+| `listViews.*.*.width`         | int    | Width allocated in table                                          |
+
+#### Type
+
+| Type        | Description                                       |
+|-------------|---------------------------------------------------|
+| duration    | Convert timestamp to duration                     |
 
 ### Get
 
 Define what fields are displayed on page for unique resource:
 
-| Parameter                  | Type   | Description                                                       |
-|----------------------------|--------|-------------------------------------------------------------------|
-| `getViews.*`               | string | Name of the edit block                                            |
-| `getViews.*.*`             | string | Kubernetes resource name like `namespaces` or `apps/deployments`  |
-| `getViews.*.*.*.label`     | string | Label of column                                                   |
-| `getViews.*.*.*.key`       | string | JSON Path selection of value                                      |
+| Parameter                    | Type   | Description                                                       |
+|------------------------------|--------|-------------------------------------------------------------------|
+| `getViews.*`                 | string | Name of the get block                                             |
+| `getViews.*.*.include`       | list   | Enable a list view for a list of Kubernetes resources             |
+| `getViews.*.*.exclude`       | list   | Disable a list view action for a list of Kubernetes resources     |
+| `getViews.*.*.items.*.label` | string | Label of column                                                   |
+| `getViews.*.*.items.*.key`   | string | JSON Path selection of value                                      |
 
 
 ### Authentications
