@@ -202,7 +202,7 @@ scale:
   payloadTemplate: |
     {
       "spec": {
-        "replicas": {{parameters.replicas}}
+        "replicas": {{ty_parameters.replicas}}
       }
     }
   parameters:
@@ -211,7 +211,7 @@ scale:
       description: "Number of replicas"
 ```
 
-`{{parameters.replicas}}` will be replaced by corresponding parameter value that user will have to define after clicking on action button.
+`{{ty_parameters.replicas}}` will be replaced by corresponding parameter value that user will have to define after clicking on action button.
 
 `{{ty_datenow}}` is a special templating lambda that will inject current date in payload. See Templating section for more. 
 
