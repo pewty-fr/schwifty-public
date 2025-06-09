@@ -22,21 +22,21 @@ Schwifty is made to help non-Kubernetes experts to enjoy their needed resources.
   - Navigation can use any CRD
   - List views columns
   - Get views content
-  - Actions (get, edit, delete, cordon, uncordon, drain, portforward, logs, FluxCD Sync, FluxCD Pause, FluxCD Resume)
+  - Actions (get, edit, delete, cordon, uncordon, drain, portforward, logs)
+  - Customizable actions: extend Schwifty capabilities for your own CRD. For example, easily add FluxCD Sync/Pause/Resume, Velero Backup, External Secret Sync buttons.
   
 - Portforward: in browser access to HTTP app
 
-- Multi clusters access & automatic discovery (no setup needed for your customers!)
+- Multi clusters access & automatic discovery (no setup needed for your customers!) limited to 2 clusters
+
+### Enterprise features
+
+- Deploy your own web interface (to avoid using https://app.schwifty.fr)
+- Multi clusters access & automatic discovery (no setup needed for your customers!) with unlimited clusters
 
 ## Features to come
 
 - Customizations:
-  - Actions :
-    - exec
-    - scale
-    - dynamic redirect: button that redirect to a link containing resource data. For example, a link to Grafana panel, containing pod name in query parameters.
-    - Velero: to trigger backup on a PV or PVC.
-    - Secrets Manager: to force sync a secret.
   - Define customization per platform
 
 - Integrate Grafana panels to home page or get views
@@ -49,7 +49,7 @@ Schwifty is made to help non-Kubernetes experts to enjoy their needed resources.
 
 ## Demo
 
-[You can try Schwifty here](https://app.schwifty.fr/#/discovery?endpoint=https://demo.schwifty.fr)
+[You can try Schwifty here](https://app.schwifty.fr/#/discovery?endpoint=https://api.demo.schwifty.fr)
 
 You can login using the next accounts (read-only).
 
@@ -70,12 +70,17 @@ Schwifty is running entirely in your browser. All your data stays in browser and
 
 <img src="image/schwifty-network.drawio.png" alt="schwifty-network" width="600" >
 
-To access your clusters, you must setup a Schwifty Backend in each cluster. Some configuration is needed.
+To access your clusters, you must setup a Schwifty Agent in each cluster. Some configuration is needed.
+
 
 ```
 kubectl create ns schwifty
-helm upgrade --install schwifty -n schwifty chart/ -f chart/values.yaml
+helm upgrade --install agent -n schwifty oci://69b10931.c1.gra9.container-registry.ovh.net/schwifty-public/chart/agent
 ```
+
+### Helm charts
+
+Our helm charts are available here: https://github.com/pewty-fr/schwifty-helm
 
 ## Values
 
@@ -95,23 +100,23 @@ Schwifty can automaticaly get all available clusters by using a discovery endpoi
 
 <img src="image/schwifty-discovery.drawio.png" alt="schwifty-network" width="600" >
 
-In a multi-cluster setup, you can define one Schwifty Backend as your discovery endpoint. It will be responsible to send to your browser all available clusters.
+In a multi-cluster setup, you can define one Schwifty Agent as your discovery endpoint. It will be responsible to send to your browser all available clusters.
 
-All other Schwifty Backends can disable discovery endpoint.
+All other Schwifty Agents can disable discovery endpoint.
 
 | Parameter                                 | Type   | Description                                              |
 |-------------------------------------------|--------|----------------------------------------------------------|
 | `config.api.discovery.enabled`            | bool   | Enable                                                   |
 | `config.api.clusters.*.name`              | string | Name of the cluster                                      |
-| `config.api.clusters.*.apiUrl`            | string | Url of Schwifty Backend API                              |
-| `config.api.clusters.*.portforwardUrl`    | string | Url of Schwifty Backend dedicated to portforward         |
+| `config.api.clusters.*.apiUrl`            | string | Url of Schwifty Agent API                              |
+| `config.api.clusters.*.portforwardUrl`    | string | Url of Schwifty Agent dedicated to portforward         |
 | `config.api.clusters.*.customizationRef`  | string | Name of the cluster referent for Schwifty Customization  |
 | `config.api.clusters.*.authenticationRef` | string | Name of the cluster referent for Schwifty Authentication |
 | `config.api.clusters.*.discoveryRef`      | string | Name of the cluster referent for Schwifty Discovery      |
 
 ### Customizations
 
-In a multi-cluster setup, you can define one Schwifty Backend as your customization endpoint. It will be responsible to get the customization for your users.
+In a multi-cluster setup, you can define one Schwifty Agent as your customization endpoint. It will be responsible to get the customization for your users.
 
 Define what customization parameters for which user's group:
 
@@ -175,11 +180,11 @@ grafana:
   verb: 'link'
   title: 'Grafana'
   icon: 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg'
-  payloadTemplate: "https://grafana.schwifty.fr/d/Schwifty/pods?orgId=1&var-namespace={{$.metadata.namespace}}&var-pod={{$.metadata.name}}"
+  payloadTemplate: "https://grafana.schwifty.fr/d/Schwifty/pods?orgId=1&var-namespace={{#ty_jsonpath}}$.metadata.namespace{{/ty_jsonpath}}&var-pod={{#ty_jsonpath}}$.metadata.name{{/ty_jsonpath}}"
   parameters: []
 ```
 
-`{{$.metadata.namespace}}` is a JsonPath that will get namespace value from clicked pod and replace it in URL.
+`{{#ty_jsonpath}}$.metadata.namespace{{#ty_jsonpath}}` is a mustache lambda that will get namespace value from clicked pod and replace it in URL. See Templating section for more.
 
 ##### Create / Patch
 
@@ -197,18 +202,18 @@ scale:
   payloadTemplate: |
     {
       "spec": {
-        "replicas": {{replicas}}
+        "replicas": {{parameters.replicas}}
       }
     }
   parameters:
     - name: "replicas"
-      defaultValue: "1"
+      defaultValue: "{{spec.replicas}}"
       description: "Number of replicas"
 ```
 
-`{{replicas}}` will be replaced by corresponding parameter value that user will have to define after clicking on action button.
+`{{parameters.replicas}}` will be replaced by corresponding parameter value that user will have to define after clicking on action button.
 
-`{{datenow}}` is a special function that will inject current date in payload.
+`{{ty_datenow}}` is a special templating lambda that will inject current date in payload. See Templating section for more. 
 
 ### Navigations
 
@@ -230,21 +235,39 @@ Define what resource are accessible from navigation:
 
 Defines the columns to display for each Kubernetes resource. If undefined, it displays: Name, Namespace and Creation Date.
 
-| Parameter                     | Type   | Description                                                       |
-|-------------------------------|--------|-------------------------------------------------------------------|
-| `listViews.*`                 | string | Name of the list block                                            |
-| `listViews.*.*.include`       | list   | Enable a list view for a list of Kubernetes resources             |
-| `listViews.*.*.exclude`       | list   | Disable a list view action for a list of Kubernetes resources     |
-| `listViews.*.*.items.*.label` | string | Label of column                                                   |
-| `listViews.*.*.items.*.key`   | string | JSON Path selection of value                                      |
-| `listViews.*.*.items.*.type`  | string | See below                                                         |
-| `listViews.*.*.width`         | int    | Width allocated in table                                          |
+| Parameter                        | Type   | Description                                                       |
+|----------------------------------|--------|-------------------------------------------------------------------|
+| `listViews.*`                    | string | Name of the list block                                            |
+| `listViews.*.*.include`          | list   | Enable a list view for a list of Kubernetes resources             |
+| `listViews.*.*.exclude`          | list   | Disable a list view action for a list of Kubernetes resources     |
+| `listViews.*.*.items.*.label`    | string | Label of column                                                   |
+| `listViews.*.*.items.*.template` | string | Templating                                                        |
+| `listViews.*.*.items.*.type`     | string | See below                                                         |
+| `listViews.*.*.width`            | int    | Width allocated in table                                          |
 
 #### Type
 
 | Type        | Description                                       |
 |-------------|---------------------------------------------------|
 | duration    | Convert timestamp to duration                     |
+| link        | Display a cliquable link                           |
+| containerStatus        | Display containers status using squares 🟩🟧🔲                           |
+| nodeMetrics        | Display CPU/Memory progress bar (< 80% = 🟩, < 90% = 🟧, > 90% = 🟥)                           |
+| podMetrics        | Display CPU/Memory progress bar (Used < Requested = 🟩, Requested < Used < Limit 🟧, Limit (or no limit) < Used 🟥)                           |
+| podCpuMetrics        | Display CPU progress bar (Used < Requested = 🟩, Requested < Used < Limit 🟧, Limit (or no limit) < Used 🟥)                           |
+| podMemoryMetrics        | Display Memory progress bar (Used < Requested = 🟩, Requested < Used < Limit 🟧, Limit (or no limit) < Used 🟥)                           |
+| percentageBar        | Create a progress bar from a given template `{{value}}/{{divider}}`                          |
+
+##### Percentage Bar
+
+```
+        - label: Memory Limits
+          template: >-
+            {{#ty_memory}}{{status.resources.memory}}{{/ty_memory}}/{{#ty_memory}}{{spec.limits.memory}}{{/ty_memory}}
+          type: percentageBar
+```
+
+This percentage bar will use value `status.resources.memory` and divider `spec.limits.memory` from a Kubernetes resource. If `value = 50` and `divider = 100`, progress bar will be half filled.
 
 ### Get
 
@@ -272,7 +295,7 @@ Directly use Impersonation on the configured groups.
 
 #### Basic
 
-Schwifty Backend authenticate users against a list of credentials stored in Kubernetes. Once authenticated, it uses Impersonation with user groups.
+Schwifty Agent authenticate users against a list of credentials stored in Kubernetes. Once authenticated, it uses Impersonation with user groups.
 
 | Parameter                                              | Type   | Description                                      |
 |--------------------------------------------------------|--------|--------------------------------------------------|
@@ -320,7 +343,7 @@ users:
 
 #### OIDC
 
-ExternalOidc & KubernetesOidc configuration do not differs. The main difference between the two methods is the use of Impersonation (through Schwifty Backend Service Account) with ExternalOidc, while Kubernetes Oidc use directly negociated token to authenticate.
+ExternalOidc & KubernetesOidc configuration do not differs. The main difference between the two methods is the use of Impersonation (through Schwifty Agent Service Account) with ExternalOidc, while Kubernetes Oidc use directly negociated token to authenticate.
 
 To enable Kubernetes Oidc, please refers to [this documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens).
 
@@ -334,3 +357,14 @@ To enable Kubernetes Oidc, please refers to [this documentation](https://kuberne
 | `config.api.authentication.externalOidc.groupsClaim`   | string | Where to find users groups                       |
 | `config.api.authentication.externalOidc.usernameClaim` | string | Where to find user names                         |
 | `config.api.authentication.externalOidc.groupsPrefix`  | string | Prefix to add to found groups                    |
+
+### Templating
+
+Schwifty use [Mustache](https://mustache.github.io/) as templating engine.
+
+#### Lambdas
+
+- `ty_datenow`: generate date of day in ISO 8601 format
+- `ty_cpu`: convert a Kubernetes cpu string (`1` or `1000m` or `1000000000n`) to a double
+- `ty_memory`: convert a Kubernetes memory string (`1Gi` or `1024Mi`, etc) to a double
+- `ty_jsonpath`: to access a field in a Kubernetes resource
