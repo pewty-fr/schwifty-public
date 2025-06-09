@@ -368,3 +368,4 @@ Schwifty use [Mustache](https://mustache.github.io/) as templating engine.
 - `ty_cpu`: convert a Kubernetes cpu string (`1` or `1000m` or `1000000000n`) to a double
 - `ty_memory`: convert a Kubernetes memory string (`1Gi` or `1024Mi`, etc) to a double
 - `ty_jsonpath`: to access a field in a Kubernetes resource
+- `ty_parameters`: to inject parameters in customized actions
