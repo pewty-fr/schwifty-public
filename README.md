@@ -247,16 +247,16 @@ Defines the columns to display for each Kubernetes resource. If undefined, it di
 
 #### Type
 
-| Type        | Description                                       |
-|-------------|---------------------------------------------------|
-| duration    | Convert timestamp to duration                     |
-| link        | Display a cliquable link                           |
-| containerStatus        | Display containers status using squares 🟩🟧🔲                           |
-| nodeMetrics        | Display CPU/Memory progress bar (< 80% = 🟩, < 90% = 🟧, > 90% = 🟥)                           |
-| podMetrics        | Display CPU/Memory progress bar (Used < Requested = 🟩, Requested < Used < Limit 🟧, Limit (or no limit) < Used 🟥)                           |
-| podCpuMetrics        | Display CPU progress bar (Used < Requested = 🟩, Requested < Used < Limit 🟧, Limit (or no limit) < Used 🟥)                           |
-| podMemoryMetrics        | Display Memory progress bar (Used < Requested = 🟩, Requested < Used < Limit 🟧, Limit (or no limit) < Used 🟥)                           |
-| percentageBar        | Create a progress bar from a given template `{{value}}/{{divider}}`                          |
+| Type             | Description                                                                                                         |
+|------------------|---------------------------------------------------------------------------------------------------------------------|
+| duration         | Convert timestamp to duration                                                                                       |
+| link             | Display a cliquable link (can be multiple links separated by comma)                                                 |
+| containerStatus  | Display containers status using squares 🟩🟧🔲                                                                      |
+| nodeMetrics      | Display CPU/Memory progress bar (< 80% = 🟩, < 90% = 🟧, > 90% = 🟥)                                                |
+| podMetrics       | Display CPU/Memory progress bar (Used < Requested = 🟩, Requested < Used < Limit 🟧, Limit (or no limit) < Used 🟥) |
+| podCpuMetrics    | Display CPU progress bar (Used < Requested = 🟩, Requested < Used < Limit 🟧, Limit (or no limit) < Used 🟥)        |
+| podMemoryMetrics | Display Memory progress bar (Used < Requested = 🟩, Requested < Used < Limit 🟧, Limit (or no limit) < Used 🟥)     |
+| percentageBar    | Create a progress bar from a given template `{{value}}/{{divider}}`                                                 |
 
 ##### Percentage Bar
 
@@ -369,3 +369,4 @@ Schwifty use [Mustache](https://mustache.github.io/) as templating engine.
 - `ty_memory`: convert a Kubernetes memory string (`1Gi` or `1024Mi`, etc) to a double
 - `ty_jsonpath`: to access a field in a Kubernetes resource
 - `ty_parameters`: to inject parameters in customized actions
+- `ty_httpshosts`: take a list of host like `["example.com", "test.com"]` and convert it to a suitable `listViews` link type item like `https://example.com,https://test.com`.
