@@ -29,8 +29,9 @@ Schwifty is made to help non-Kubernetes experts to enjoy their needed resources.
 
 - Multi clusters access & automatic discovery (no setup needed for your customers!) limited to 2 clusters
 
-### Enterprise features
+### Enterprise features
 
+- All previous features
 - Deploy your own web interface (to avoid using https://app.schwifty.fr)
 - Multi clusters access & automatic discovery (no setup needed for your customers!) with unlimited clusters
 
@@ -38,10 +39,12 @@ Schwifty is made to help non-Kubernetes experts to enjoy their needed resources.
 
 - Customizations:
   - Define customization per platform
+  
+- Portforward: handle basic auth in browser
 
 - Integrate Grafana panels to home page or get views
   
-- Portforward: handle basic auth in browser
+- Audit logs in Agent
 
 - Android/iOS app
 
@@ -78,7 +81,7 @@ kubectl create ns schwifty
 helm upgrade --install agent -n schwifty oci://69b10931.c1.gra9.container-registry.ovh.net/schwifty-public/chart/agent
 ```
 
-### Helm charts
+### Helm charts
 
 Our helm charts are available here: https://github.com/pewty-fr/schwifty-helm
 
@@ -164,7 +167,7 @@ include & exclude list allow to enable or disable an action for a given resource
 | logs        | Display logs of pod                               |
 | portforward | Display http endpoint of pods                     |
 
-#### Custom actions
+#### Custom actions
 
 You can defined your own action on a given resource.
 
@@ -358,7 +361,8 @@ To enable Kubernetes Oidc, please refers to [this documentation](https://kuberne
 | `config.api.authentication.externalOidc.usernameClaim` | string | Where to find user names                         |
 | `config.api.authentication.externalOidc.groupsPrefix`  | string | Prefix to add to found groups                    |
 
-### Templating
+
+### Templating
 
 Schwifty use [Mustache](https://mustache.github.io/) as templating engine.
 
