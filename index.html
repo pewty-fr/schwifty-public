@@ -34,7 +34,7 @@
     <!-- Navigation -->
     <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 flex items-center">
                         <img src="images/favicon.png" alt="Schwifty Logo" class="h-10">
@@ -46,8 +46,6 @@
                     <a href="#how-it-works" class="text-gray-900 hover:text-indigo-600 px-3 py-2 text-sm font-medium i18n-works">How It Works</a>
                     <a href="#pricing" class="text-gray-900 hover:text-indigo-600 px-3 py-2 text-sm font-medium i18n-pricing">Pricing</a>
                     <a href="#contact" class="text-gray-900 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Contact</a>
-                </div>
-                <div class="flex items-center">
                     <a href="#pricing" class="ml-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white gradient-bg hover:opacity-90 i18n-started">
                         Get Started
                     </a>
@@ -55,25 +53,88 @@
                         Connect
                     </a>
 
-                <select id="languageSelect" class="ml-8 block px-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50" onchange="i18n()">
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                </select>
+                    <div class="md:flex md:items-center"></div>
+                        <div class="ml-8 block px-2 bg-white">
+                            <div>
+                                <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50" name="menu-button" aria-expanded="true" aria-haspopup="true">
+                                <i class="fas fa-globe"></i>
+                                </button>
+                            </div>
+
+                            <!--
+                                Dropdown menu, show/hide based on menu state.
+
+                                Entering: "transition ease-out duration-100"
+                                From: "transform opacity-0 scale-95"
+                                To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                From: "transform opacity-100 scale-100"
+                                To: "transform opacity-0 scale-95"
+                            -->
+                            <div class="hidden absolute right-0 z-10 mt-2 w-20 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" name="menu-language">
+                                <div class="py-1" role="none">
+                                    <!-- Active: "bg-gray-100 text-gray-900 outline-hidden", Not Active: "text-gray-700" -->
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-900 hover:text-indigo-600" onclick="i18n('en')">English</a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-900 hover:text-indigo-600" onclick="i18n('fr')">Français</a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md:hidden">
+                        <div class="ml-8 block px-2 bg-white">
+                            <div>
+                                <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50" name="menu-button" aria-expanded="true" aria-haspopup="true">
+                                <i class="fas fa-globe"></i>
+                                </button>
+                            </div>
+
+                            <!--
+                                Dropdown menu, show/hide based on menu state.
+
+                                Entering: "transition ease-out duration-100"
+                                From: "transform opacity-0 scale-95"
+                                To: "transform opacity-100 scale-100"
+                                Leaving: "transition ease-in duration-75"
+                                From: "transform opacity-100 scale-100"
+                                To: "transform opacity-0 scale-95"
+                            -->
+                            <div class="hidden absolute right-10 z-10 mt-2 w-20 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" name="menu-language">
+                                <div class="py-1" role="none">
+                                    <!-- Active: "bg-gray-100 text-gray-900 outline-hidden", Not Active: "text-gray-700" -->
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-900 hover:text-indigo-600" onclick="i18n('en')">English</a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-900 hover:text-indigo-600" onclick="i18n('fr')">Français</a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:hidden pt-1">
+                        <button id="mobile-menu-button" class="text-gray-500 hover:text-orange-400 focus:outline-none">
+                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                    </div>
+            
                 </div>
-            </div>
-        </div>
-        
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#features" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 i18n-features">Features</a>
-                <a href="#how-it-works" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 i18n-works">How It Works</a>
-                <a href="#pricing" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 i18n-princing">Pricing</a>
-                <a href="#contact" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">Contact</a>
-                <select id="languageSelect" class="block px-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50" onchange="i18n()">
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                </select>
+                <!-- Mobile menu -->
+                <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+                    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                        <a href="#features" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 i18n-features" onclick="tootleMobileMenu()">Features</a>
+                        <a href="#how-it-works" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 i18n-works" onclick="tootleMobileMenu()">How It Works</a>
+                        <a href="#pricing" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 i18n-princing" onclick="tootleMobileMenu()">Pricing</a>
+                        <a href="#contact" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50" onclick="tootleMobileMenu()">Contact</a>
+                        <a href="#pricing" class="block px-3 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white gradient-bg hover:opacity-90 i18n-started" onclick="tootleMobileMenu()">
+                            Get Started
+                        </a>
+                        <a href="https://app.schwifty.fr" class="block px-3 py-2 border border-indigo-400 rounded-md shadow-sm text-sm font-medium text-indigo-700 bg-white hover:bg-gray-50 i18n-connect" onclick="tootleMobileMenu()">
+                            Connect
+                        </a>
+
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -585,23 +646,59 @@
             });
         }
 
-        function i18n() {
-            var language = document.getElementById("languageSelect").value;
-            if (language) {
-                fetch(`/lang/${language}.json`)
-                .then(response => response.json())
-                .then(data => {
-                    for (const [key, value] of Object.entries(data)) {
-                        elements = document.getElementsByClassName(`i18n-${key}`);
-                        for (let i = 0; i < elements.length; i++) {
-                            elements[i].innerHTML = value;
-                        }
+        function i18n(lang) {
+            fetch(`/lang/${lang}.json`)
+            .then(response => response.json())
+            .then(data => {
+                for (const [key, value] of Object.entries(data)) {
+                    elements = document.getElementsByClassName(`i18n-${key}`);
+                    for (let i = 0; i < elements.length; i++) {
+                        elements[i].innerHTML = value;
                     }
-                })
-                .catch(error => console.error('Error loading JSON:', error));
-            }
+                }
+            })
+            .catch(error => console.error('Error loading JSON:', error));
         }
         window.addEventListener('load', i18n);
+
+        const menuButtons = document.getElementsByName("menu-button");
+
+        menuButtons[0].addEventListener('click', () => menuLangClick(0));
+        menuButtons[1].addEventListener('click', () => menuLangClick(1));
+
+        function menuLangClick(id){
+            const menuLang = document.getElementsByName("menu-language")[id];
+            if (menuLang.classList.contains('hidden')) {
+                menuLang.classList.remove('hidden');
+                menuLang.style.transform = 'scale(0.95)';
+                // menuLang.style.opacity = '0';
+                menuLang.style.transition = 'transform 100ms ease-out, opacity 100ms ease-out';
+                // Trigger the transition
+                setTimeout(() => {
+                    menuLang.style.transform = 'scale(1)';
+                    // menuLang.style.opacity = '1';
+                }, 0);
+            }else{
+                menuLang.classList.add('hidden');
+                menuLang.style.transform = 'scale(1)';
+                // menuLang.style.opacity = '1';
+                menuLang.style.transition = 'transform 75ms ease-in, opacity 75ms ease-in';
+                // Trigger the transition
+                setTimeout(() => {
+                    menuLang.style.transform = 'scale(0.95)';
+                    // menuLang.style.opacity = '0';
+                }, 0);
+            }
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', tootleMobileMenu);
+
+        function tootleMobileMenu(){
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+        
     </script>
 </body>
 </html>
